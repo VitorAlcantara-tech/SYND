@@ -1,0 +1,151 @@
+"use client";
+
+import { ChangeEvent, useState } from "react";
+
+export default function Home() {
+  const [arquivo, setArquivo] = useState<File | null>(null);
+  const [nomeArquivo, setNomeArquivo] = useState("");
+  const [resposta, setResposta] = useState("");
+  const [erro, setErro] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  function selecionarArquivo(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      setArquivo(null);
+      setNomeArquivo("");
+      return;
+    }
+
+    const formatosPermitidos = [".json", ".csv", ".txt"];
+    const arquivoValido = formatosPermitidos.some((formato) =>
+      file.name.toLowerCase().endsWith(formato)
+    );
+
+    if (!arquivoValido) {
+      setErro("Selecione um arquivo .json, .csv ou .txt válido.");
+      setArquivo(null);
+      setNomeArquivo("");
+      return;
+    }
+
+    setErro("");
+    setArquivo(file);
+    setNomeArquivo(file.name);
+  }
+
+  async function analisarReuniao() {
+    if (!arquivo) {
+      setErro("Selecione o arquivo transcricao.json antes de analisar.");
+      return;
+    }
+
+    setLoading(true);
+    setErro("");
+    setResposta("");
+
+    const formData = new FormData();
+    formData.append("file", arquivo);
+
+    try {
+      const response = await fetch(`${apiUrl}/api/analisar-reuniao`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Erro ao analisar reunião.");
+      }
+
+      setResposta(data.resposta);
+    } catch (error) {
+      if (error instanceof Error) {
+        setErro(error.message);
+      } else {
+        setErro("Erro inesperado ao conectar com o backend.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <main className="min-h-screen bg-zinc-950 text-zinc-100 px-6 py-10">
+      <div className="mx-auto max-w-5xl space-y-6">
+        <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg">
+          <p className="text-sm font-medium text-blue-400">
+            SYND · Análise de reuniões com IA
+          </p>
+
+          <h1 className="mt-2 text-3xl font-bold">
+            Analisador de Transcrição
+          </h1>
+
+          <p className="mt-3 max-w-3xl text-zinc-400">
+            Envie o arquivo <strong>transcricao.json</strong>. O backend vai
+            processar os dados com Pandas, aplicar o prompt fixo configurado no
+            FastAPI e retornar a análise gerada pelo Gemini.
+          </p>
+        </section>
+
+        <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 space-y-5">
+          <div>
+            <h2 className="text-xl font-semibold">1. Upload do arquivo</h2>
+            <p className="mt-1 text-sm text-zinc-400">
+              Selecione o arquivo JSON da transcrição da reunião.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-dashed border-zinc-700 bg-zinc-950 p-6">
+            <input
+              type="file"
+              accept=".json,.csv,.txt,application/json,text/csv,text/plain"
+              onChange={selecionarArquivo}
+              className="block w-full cursor-pointer text-sm text-zinc-300 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-700"
+            />
+
+            {nomeArquivo && (
+              <p className="mt-3 text-sm text-zinc-400">
+                Arquivo selecionado:{" "}
+                <span className="font-medium text-zinc-200">{nomeArquivo}</span>
+              </p>
+            )}
+          </div>
+
+          <button
+            onClick={analisarReuniao}
+            disabled={loading}
+            className="rounded-lg bg-blue-600 px-5 py-2.5 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-950 disabled:text-zinc-400"
+          >
+            {loading ? "Analisando..." : "Analisar reunião"}
+          </button>
+        </section>
+
+        {erro && (
+          <section className="rounded-2xl border border-red-800 bg-red-950 p-5 text-red-200">
+            <h2 className="font-semibold">Erro</h2>
+            <p className="mt-1 text-sm">{erro}</p>
+          </section>
+        )}
+
+        <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 space-y-4">
+          <div>
+            <h2 className="text-xl font-semibold">2. Resposta da IA</h2>
+            <p className="mt-1 text-sm text-zinc-400">
+              A análise retornada pelo Gemini será exibida abaixo.
+            </p>
+          </div>
+
+          <div className="min-h-96 rounded-xl border border-zinc-800 bg-zinc-950 p-5 text-sm leading-6 text-zinc-200 whitespace-pre-wrap">
+            {resposta || "Aguardando envio do arquivo para análise..."}
+          </div>
+        </section>
+      </div>
+    </main>
+  );
+}
