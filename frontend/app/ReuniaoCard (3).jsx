@@ -21,7 +21,7 @@ function parseDataHoraBR(str) {
   return str.includes("T") ? str : str.replace(" ", "T");
 }
 
-export function safeParseAnalise(valor) {
+function safeParseAnalise(valor) {
   if (!valor) return {};
   if (typeof valor === "object") return valor; // já veio parseado
   try {
@@ -30,69 +30,6 @@ export function safeParseAnalise(valor) {
     console.error("Falha ao fazer parse de 'Analise':", err, valor);
     return {};
   }
-}
-
-function ehItemTextoTrecho(item) {
-  return (
-    item &&
-    typeof item === "object" &&
-    typeof item.texto === "string" &&
-    (item.trecho === null || item.trecho === undefined || typeof item.trecho === "string")
-  );
-}
-
-/**
- * Valida se o objeto retornado pela IA tem o shape esperado pelo ReuniaoCard.
- * Retorna { valido, erros } — erros é uma lista de strings legíveis,
- * uma por problema encontrado (não para na primeira falha).
- */
-export function validarAnalise(raw) {
-  const erros = [];
-
-  if (!raw || typeof raw !== "object") {
-    return { valido: false, erros: ["A resposta da IA não é um objeto."] };
-  }
-
-  if (!("Analise" in raw)) {
-    return { valido: false, erros: ['Campo "Analise" ausente no objeto retornado.'] };
-  }
-
-  const analiseOriginal = raw["Analise"];
-  const analise = safeParseAnalise(analiseOriginal);
-
-  if (typeof analiseOriginal === "string" && Object.keys(analise).length === 0) {
-    return { valido: false, erros: ['Campo "Analise" não pôde ser interpretado como JSON.'] };
-  }
-
-  if (typeof analise.resumo_geral !== "string") {
-    erros.push('"resumo_geral" ausente ou não é uma string.');
-  }
-  if (typeof analise.principais_assuntos !== "string") {
-    erros.push('"principais_assuntos" ausente ou não é uma string.');
-  }
-  if (!Array.isArray(analise.dores) || !analise.dores.every(ehItemTextoTrecho)) {
-    erros.push('"dores" deveria ser uma lista de objetos {texto, trecho}.');
-  }
-  if (!Array.isArray(analise.oportunidades) || !analise.oportunidades.every(ehItemTextoTrecho)) {
-    erros.push('"oportunidades" deveria ser uma lista de objetos {texto, trecho}.');
-  }
-  if (!Array.isArray(analise.evidencias_churn) || !analise.evidencias_churn.every(ehItemTextoTrecho)) {
-    erros.push('"evidencias_churn" deveria ser uma lista de objetos {texto, trecho}.');
-  }
-  if (!["baixo", "medio", "alto"].includes(analise.risco_churn)) {
-    erros.push('"risco_churn" deveria ser "baixo", "medio" ou "alto".');
-  }
-  if (typeof analise.sentimento !== "number") {
-    erros.push('"sentimento" ausente ou não é um número.');
-  }
-  if (
-    !Array.isArray(analise.tarefas) ||
-    !analise.tarefas.every((t) => t && typeof t === "object" && typeof t.nome === "string")
-  ) {
-    erros.push('"tarefas" deveria ser uma lista de objetos com pelo menos "nome" (string).');
-  }
-
-  return { valido: erros.length === 0, erros };
 }
 
 function normalizeReuniao(raw) {
@@ -120,18 +57,28 @@ function normalizeReuniao(raw) {
     resumoGeral: analise.resumo_geral ?? "",
     principaisAssuntos: analise.principais_assuntos ?? "",
 
-    // dores/oportunidades já vêm do prompt como lista de {texto, trecho}
-    dores: (analise.dores ?? []).map((d) => ({ texto: d.texto, trecho: d.trecho ?? null })),
-    oportunidades: (analise.oportunidades ?? []).map((o) => ({ texto: o.texto, trecho: o.trecho ?? null })),
+    // No JSON real, "dores"/"oportunidades" são um parágrafo único, e as
+    // citações ficam soltas em "trechos_chave_*" (sem pareamento 1:1 com
+    // uma afirmação específica) — diferente do mock antigo, que tinha
+    // {texto, trecho} pareados item a item.
+    dores: {
+      resumo: analise.dores ?? "",
+      trechos: analise.trechos_chave_dores ?? [],
+    },
+    oportunidades: {
+      resumo: analise.oportunidades ?? "",
+      trechos: analise.trechos_chave_oportunidades ?? [],
+    },
 
+    // Idem: "trechos_chave_tarefas" é uma lista solta, não amarrada a uma
+    // tarefa específica, então cada tarefa fica sem "trecho" individual.
     tarefas: (analise.tarefas ?? []).map((t) => ({
       nome: t.nome,
       data: t.data_prevista ?? "Não identificado",
-      trecho: t.trecho ?? null,
     })),
 
     riscoChurn: analise.risco_churn ?? "baixo",
-    evidenciasChurn: (analise.evidencias_churn ?? []).map((e) => ({ texto: e.texto, trecho: e.trecho ?? null })),
+    evidenciasChurn: analise.evidencias_churn ?? [],
     sentimento: analise.sentimento ?? 0,
   };
 }
@@ -219,6 +166,38 @@ function CollapsibleSection({ icon, title, accent, items, defaultOpen = false })
         </ul>
       )}
     </div>
+  );
+}
+
+/**
+ * Divide um parágrafo em afirmações individuais, usando vírgula e a
+ * conjunção " e " como separadores (heurística simples para PT-BR).
+ */
+function splitEmAfirmacoes(str) {
+  if (!str) return [];
+  return str
+    .split(/,| e (?=[a-zà-ú])/i)
+    .map((s) => s.trim().replace(/\.$/, ""))
+    .filter(Boolean);
+}
+
+/**
+ * Cada afirmação extraída de "dores"/"oportunidades" vira um item visível
+ * no card; a citação correspondente em trechos_chave_* fica escondida
+ * atrás do "ver trecho" (pareamento por posição, best-effort).
+ */
+function BlocoAnalise({ icon, title, accent, resumo, trechos }) {
+  const afirmacoes = splitEmAfirmacoes(resumo);
+  if (afirmacoes.length === 0) return null;
+
+  const total = Math.max(afirmacoes.length, trechos.length);
+  const items = Array.from({ length: total }, (_, i) => ({
+    texto: afirmacoes[i] ?? "Ponto adicional identificado",
+    trecho: trechos[i] ?? null,
+  }));
+
+  return (
+    <CollapsibleSection icon={icon} title={title} accent={accent} items={items} />
   );
 }
 
@@ -365,18 +344,20 @@ export default function ReuniaoCard({ data: rawData }) {
           <p className="text-sm text-slate-300 leading-relaxed">{data.resumoGeral}</p>
         </div>
 
-        <CollapsibleSection
+        <BlocoAnalise
           icon={<CircleDot size={13} />}
           title="Dores"
           accent="text-rose-400"
-          items={data.dores}
+          resumo={data.dores.resumo}
+          trechos={data.dores.trechos}
         />
 
-        <CollapsibleSection
+        <BlocoAnalise
           icon={<Lightbulb size={13} />}
           title="Oportunidades"
           accent="text-blue-400"
-          items={data.oportunidades}
+          resumo={data.oportunidades.resumo}
+          trechos={data.oportunidades.trechos}
         />
 
         <TaskChecklist tarefas={data.tarefas} />
@@ -386,7 +367,7 @@ export default function ReuniaoCard({ data: rawData }) {
             icon={<AlertTriangle size={13} />}
             title="Evidências de churn"
             accent="text-amber-400"
-            items={data.evidenciasChurn}
+            items={data.evidenciasChurn.map((e) => ({ texto: e, trecho: null }))}
           />
         )}
       </div>

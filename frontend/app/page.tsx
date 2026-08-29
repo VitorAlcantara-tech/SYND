@@ -2,7 +2,6 @@
 
 import { ChangeEvent, useEffect, useState } from "react";
 import Upload from "./Upload";
-import ReuniaoCard from "./ReuniaoCard"
 
 export default function Home() {
   const [arquivo, setArquivo] = useState<File | null>(null);
