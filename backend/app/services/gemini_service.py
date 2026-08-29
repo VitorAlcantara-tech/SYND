@@ -28,5 +28,4 @@ async def enviar_para_gemini(prompt_final: str) -> str:
         model="gemini-3.1-flash-lite",
         contents=prompt_final
     )
-
     return response.text

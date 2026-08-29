@@ -6,6 +6,9 @@ from app.services.tratamento_service import processar_arquivo
 from app.prompt.reuniao_prompt import montar_prompt
 from app.services.gemini_service import enviar_para_gemini
 
+from datetime import datetime
+import sys
+
 app = FastAPI(title="API de Análise de Reuniões")
 
 app.add_middleware(
@@ -47,8 +50,9 @@ async def analisar_reuniao(file: UploadFile = File(...)):
         resposta_gemini = await enviar_para_gemini(prompt_final)
         dict_reuniao["Analise"] = resposta_gemini
         
-        print(dict_reuniao)
-        
+        with open(f"Resultado {datetime.now().strftime('%d-%m-%Y__%H-%M-%S')}.txt", "w", encoding="utf-8") as f:
+            f.write(f"\n\n{prompt_final}\n\n{str(dict_reuniao)}") 
+            
         return {
             "status": "success",
             "arquivo": file.filename,

@@ -47,6 +47,7 @@ Regras obrigatórias:
 - Considere que a transcrição já está anonimizada.
 - Responda em português do Brasil.
 - Devolva APENAS o JSON válido, sem texto antes ou depois, sem markdown, sem ```.
+- risco_churn e evidencias_churn são os dados mais delicados, analise com precisão e apenas insira nessas variáveis informações que sinalizem real intenção de desistência.
 
 Dados e transcrição da reunião:
 
