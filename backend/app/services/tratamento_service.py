@@ -190,7 +190,7 @@ def processar_dataframe(df: pd.DataFrame) -> str:
         Segmento: {row["NOME_SEGMENTO"]}
         Faixa de faturamento do cliente: {row["FAIXA_FATURAMENTO_CLIENTE_EC"]}
         Data da última pesquisa: {row["DT_ULTIMA_PESQUISA"]}
-        Nota NPS: {row["NOTA_NPS"]} (De 1 a 5)
+        Nota NPS: {row["NOTA_NPS"]} (De 0 a 10)
 
         ==============================
         TRANSCRIÇÃO ANONIMIZADA
