@@ -38,15 +38,17 @@ export default function Init() {
                     <div className="pt-10 md:pt-0 md:pl-30 pb-10 md:pb-40 relative">
                         <Image
                             src={box}
+                            alt="Caixa octagonal com o logo SYND para transcrição presencial"
                             width={500}
                             height={500}
-                            className="relative z-20 w-[80%] md:w-[500px] h-auto"
+                            className="relative z-20 w-[80%] md:w-[500px] h-auto transform hover:rotate-5 hover:translate-y-2 transition-all"
                         />
                         <Image
+                            alt="Card Azul para contraposição visual com a caixa octagonal"
                             src={cards}
                             width={350}
                             height={350}
-                            className="absolute bottom-10 right-5 md:bottom-30 md:-right-20 z-10 w-[55%] md:w-[350px] h-auto"
+                            className="absolute bottom-10 right-5 md:bottom-30 md:-right-20 z-10 w-[55%] md:w-[350px] h-auto transform hover:rotate-5 hover:-translate-x-5 transition-all"
                         />
                     </div>
                 </section>
