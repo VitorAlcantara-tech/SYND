@@ -3,6 +3,7 @@
 import SentimentDashboard from "../components/chart"
 import Navbar from "../components/navbar"
 
+
 export default function Vendedor() {
 
     return (

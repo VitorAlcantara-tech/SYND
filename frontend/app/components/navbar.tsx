@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Clipboard, Calendar, Users } from 'lucide-react';
+import { Clipboard, Calendar, Users, Home } from 'lucide-react';
 import logo from '@/public/images/synd_logo.png'
+import Link from 'next/link'
 
 const menuItems = [
   { label: 'Tarefas', icon: Clipboard, href: '#' },
   { label: 'Agenda', icon: Calendar, href: '#' },
   { label: 'Clientes', icon: Users, href: '#' },
+  { label: 'Inicio', icon: Home, href: 'http://localhost:3000/' }
 ];
 
 export default function Header() {
@@ -90,14 +92,14 @@ export default function Header() {
 
         <div className="flex flex-col gap-1 font-semibold">
           {menuItems.map(({ label, icon: Icon, href }) => (
-              <a
+              <Link
               key={label}
               href={href}
-              className="flex flex-row items-center gap-3 py-3 px-3 rounded-lg text-white/90 hover:bg-white/10 hover:text-white active:bg-white/20 transition-colors duration-200"
+              className="flex flex-row items-center gap-3 py-3 px-3 rounded-sm text-white/90 hover:bg-white/10 hover:text-white active:bg-white/20 transition-colors duration-200 font-normal"
             >
               <Icon size={20} strokeWidth={1.75} />
               <span className="text-sm md:text-base">{label}</span>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
