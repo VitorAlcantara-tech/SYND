@@ -7,7 +7,7 @@ import Synd3D from "../Synd3D"
 
 export default function Init() {
     return (
-        <main className="w-full min-h-screen overflow-x-hidden" style={{
+        <main className="w-full min-h-screen overflow-x-hidden text-white" style={{
             background: "linear-gradient(139deg, #002740 0%, #06486C 53%, #06486C 98%)"
         }}>
 
@@ -34,8 +34,8 @@ export default function Init() {
                     <div className="text-2xl lg:text-4xl font-semibold leading-tight md:leading-11.0" style={{ textShadow: "0 0 50px rgba(255, 255, 255, 0.2)" }}>REUNIÕES COMERCIAIS TRANSFORMADAS EM DADOS</div>
                     <p
                         className="
-                            mt-6 max-w-xl
-                            text-base leading-7 text-white/70
+                            mt-3 max-w-xl
+                            text-base text-white/80
                             sm:text-lg
                         "
                         >
