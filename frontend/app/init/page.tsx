@@ -48,7 +48,7 @@ export default function Init() {
                             src={cards}
                             width={350}
                             height={350}
-                            className="absolute bottom-10 right-5 md:bottom-30 md:-right-20 z-10 w-[55%] md:w-[350px] h-auto transform hover:rotate-5 hover:-translate-x-5 transition-all"
+                            className="absolute bottom-10 right-5 md:bottom-30 md:-right-20 z-10 w-[55%] md:w-[350px] h-auto transform hover:-translate-x-5 transition-all"
                         />
                     </div>
                 </section>
