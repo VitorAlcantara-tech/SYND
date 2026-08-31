@@ -18,7 +18,6 @@ export default function Header() {
 
   const toggleSideBar = () => setSidebar((prev) => !prev);
 
-  // Fecha a sidebar com Esc
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setSidebar(false);
@@ -38,7 +37,6 @@ export default function Header() {
           className="w-20 md:w-[120px] h-auto"
         />
 
-        {/* Botão hambúrguer / X */}
         <button
           className="relative z-30 p-3 -m-3 flex flex-col gap-2 justify-center items-center w-[28px] h-[22px]"
           onClick={toggleSideBar}
@@ -68,7 +66,6 @@ export default function Header() {
         </button>
       </nav>
 
-      {/* Overlay */}
       <div
         className={
           sidebar
@@ -78,26 +75,25 @@ export default function Header() {
         onClick={toggleSideBar}
       ></div>
 
-      {/* Sidebar */}
       <div
         className={
           sidebar
-            ? 'fixed top-0 right-0 z-20 flex flex-col w-[50%] md:w-[13%] h-screen border-l border-white/10 bg-[#002740] text-white shadow-2xl shadow-black/50 pt-24 md:pt-32 px-5 transform transition-transform duration-300 ease-in-out translate-x-0'
-            : 'fixed top-0 right-0 z-20 flex flex-col w-[50%] md:w-[13%] h-screen border-l border-white/10 bg-[#002740] text-white shadow-2xl shadow-black/50 pt-24 md:pt-32 px-5 transform transition-transform duration-300 ease-in-out translate-x-full'
+            ? 'fixed top-0 right-0 z-20 flex flex-col w-[50%] md:w-[13%] h-screen border-l border-white/10 bg-[#002740] text-white shadow-2xl shadow-black/50 pt-24 md:pt-32 transform transition-transform duration-300 ease-in-out translate-x-0'
+            : 'fixed top-0 right-0 z-20 flex flex-col w-[50%] md:w-[13%] h-screen border-l border-white/10 bg-[#002740] text-white shadow-2xl shadow-black/50 pt-24 md:pt-32 transform transition-transform duration-300 ease-in-out translate-x-full'
         }
       >
-        <span className="text-xs uppercase font-semibold text-white/40 mb-2 px-3">
+        <span className="text-xs uppercase font-semibold text-white/40 mb-2 px-5">
           Menu
         </span>
 
-        <div className="flex flex-col gap-1 font-semibold">
+        <div className="flex flex-col gap-1 font-semibold w-full">
           {menuItems.map(({ label, icon: Icon, href }) => (
-              <Link
+            <Link
               key={label}
               href={href}
-              className="flex flex-row items-center gap-3 py-3 px-3 rounded-sm text-white/90 hover:bg-white/10 hover:text-white active:bg-white/20 transition-colors duration-200 font-normal"
+              className="flex flex-row items-center gap-3 py-3 px-3 w-full text-white/90 hover:bg-white/10 hover:text-white active:bg-white/20 transition-colors duration-200 font-normal"
             >
-              <Icon size={20} strokeWidth={1.75} />
+              <Icon className="ml-3" size={20} strokeWidth={1.75} />
               <span className="text-sm md:text-base">{label}</span>
             </Link>
           ))}
