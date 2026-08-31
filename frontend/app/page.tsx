@@ -49,7 +49,7 @@ export default function Init() {
                     </Link>
                 </section>
                 <section className="relative flex w-full items-center justify-center">
-                    <div className="relative h-[600px] w-full">
+                    <div className="relative h-[500px] md:h-[600px] w-full">
 
                         {/* Card decorativo */}
                         <Image
@@ -76,6 +76,7 @@ export default function Init() {
                             pointer-events-auto
                             absolute
                             inset-0
+                           
                             z-10
                         "
                         >

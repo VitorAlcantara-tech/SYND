@@ -1,35 +1,26 @@
 "use client"
 
-import { Suspense, useMemo } from "react"
-import { Canvas } from "@react-three/fiber"
+import { Suspense, useMemo, useRef, useState } from "react"
+import { Canvas, useFrame } from "@react-three/fiber"
 import {
   Bounds,
   Center,
+  ContactShadows,
+  Environment,
   OrbitControls,
   useFBX,
 } from "@react-three/drei"
 import * as THREE from "three"
+import { motion } from "framer-motion"
 
-/**
- * Pega não apenas o nome do Mesh,
- * mas também os nomes dos pais dele.
- *
- * Exemplo:
- * SYND_Tempo > typeMesh1
- *
- * vira:
- * "typeMesh1 synd_tempo synd_master_grp ..."
- */
 function getHierarchyName(object: THREE.Object3D) {
   const names: string[] = []
-
   let current: THREE.Object3D | null = object
 
   while (current) {
     if (current.name) {
       names.push(current.name.toLowerCase())
     }
-
     current = current.parent
   }
 
@@ -38,8 +29,6 @@ function getHierarchyName(object: THREE.Object3D) {
 
 function createPlasticTexture(size = 128) {
   const data = new Uint8Array(size * size * 4)
-
-  // Seed fixa para a textura não mudar a cada reload
   let seed = 123456
 
   const random = () => {
@@ -48,9 +37,7 @@ function createPlasticTexture(size = 128) {
   }
 
   for (let i = 0; i < size * size; i++) {
-    // Ruído bem discreto
     const value = Math.floor(115 + random() * 28)
-
     const index = i * 4
 
     data[index] = value
@@ -68,10 +55,7 @@ function createPlasticTexture(size = 128) {
 
   texture.wrapS = THREE.RepeatWrapping
   texture.wrapT = THREE.RepeatWrapping
-
-  // Quantas vezes a microtextura se repete
   texture.repeat.set(20, 20)
-
   texture.minFilter = THREE.LinearFilter
   texture.magFilter = THREE.LinearFilter
   texture.needsUpdate = true
@@ -84,117 +68,66 @@ function SyndModel() {
 
   const model = useMemo(() => {
     const clone = fbx.clone(true)
-
-    /*
-    |--------------------------------------------------------------------------
-    | CORPO
-    |--------------------------------------------------------------------------
-    | Plástico azul fosco.
-    |
-    | Não usamos PhysicalMaterial aqui porque queremos uma cor mais estável
-    | conforme o produto gira.
-    */
     const plasticTexture = createPlasticTexture()
 
     const bodyMaterial = new THREE.MeshPhysicalMaterial({
-      // Um pouco mais claro que o atual
-      color: "#0a4569",
-
-      metalness: 0.015,
-      roughness: 0.68,
-
-      // MICROTEXTURA REAL
+      color: "#002740",
+      metalness: 0.0,
+      roughness: 0.6,
       bumpMap: plasticTexture,
-      bumpScale: 0.012,
-
-      // Um reflexo extremamente discreto
-      clearcoat: 0.06,
-      clearcoatRoughness: 0.75,
+      bumpScale: 0.015,
+      clearcoat: 0.15,
+      clearcoatRoughness: 0.6,
+      clearcoatNormalMap: plasticTexture,
+      clearcoatNormalScale: new THREE.Vector2(0.1, 0.1),
+      envMapIntensity: 0.6,
     })
 
-    /*
-    |--------------------------------------------------------------------------
-    | LOGO
-    |--------------------------------------------------------------------------
-    */
-    const logoMaterial = new THREE.MeshStandardMaterial({
+    const logoMaterial = new THREE.MeshPhysicalMaterial({
       color: "#E9ECEF",
-      roughness: 0.52,
       metalness: 0,
+      roughness: 0.75,
+      bumpMap: plasticTexture,
+      bumpScale: 0.015,
+      envMapIntensity: 0.5,
     })
 
-    /*
-    |--------------------------------------------------------------------------
-    | BASE / MOLDURA DO DISPLAY
-    |--------------------------------------------------------------------------
-    */
     const displayMaterial = new THREE.MeshStandardMaterial({
       color: "#080D12",
       roughness: 0.48,
       metalness: 0.05,
-
-      // Evita conflito com o vidro caso estejam muito próximos
       polygonOffset: true,
       polygonOffsetFactor: 1,
       polygonOffsetUnits: 1,
     })
 
-    /*
-    |--------------------------------------------------------------------------
-    | VIDRO
-    |--------------------------------------------------------------------------
-    | Preto com brilho discreto.
-    */
     const glassMaterial = new THREE.MeshPhysicalMaterial({
       color: "#05090D",
-
       roughness: 0.16,
       metalness: 0,
-
       clearcoat: 0.75,
       clearcoatRoughness: 0.12,
-
+      envMapIntensity: 1.5,
       emissive: new THREE.Color("#02070B"),
       emissiveIntensity: 0.12,
-
       polygonOffset: true,
       polygonOffsetFactor: -1,
       polygonOffsetUnits: -1,
     })
 
-    /*
-    |--------------------------------------------------------------------------
-    | TIMER
-    |--------------------------------------------------------------------------
-    | MeshBasicMaterial é proposital.
-    |
-    | O texto deve parecer uma tela, então não queremos que fique escuro
-    | quando o produto gira para longe da luz.
-    */
     const timerMaterial = new THREE.MeshBasicMaterial({
       color: "#DDFBFF",
-
       side: THREE.DoubleSide,
-
       toneMapped: false,
-
       polygonOffset: true,
       polygonOffsetFactor: -3,
       polygonOffsetUnits: -3,
     })
 
-    /*
-    |--------------------------------------------------------------------------
-    | REC
-    |--------------------------------------------------------------------------
-    */
     const recMaterial = new THREE.MeshBasicMaterial({
       color: "#FF3F52",
-
       side: THREE.DoubleSide,
-
       toneMapped: false,
-
       polygonOffset: true,
       polygonOffsetFactor: -4,
       polygonOffsetUnits: -4,
@@ -203,32 +136,11 @@ function SyndModel() {
     clone.traverse((child) => {
       if (!(child instanceof THREE.Mesh)) return
 
-      /*
-       * IMPORTANTE:
-       *
-       * Antes usávamos:
-       *
-       * child.name
-       *
-       * Agora usamos o nome da hierarquia inteira.
-       *
-       * Isso permite reconhecer:
-       *
-       * SYND_Tempo
-       *   └── typeMesh1
-       *
-       * mesmo que o Mesh propriamente dito se chame typeMesh1.
-       */
       const hierarchy = getHierarchyName(child)
 
-      child.castShadow = false
+      child.castShadow = true
       child.receiveShadow = false
 
-      /*
-      |--------------------------------------------------------------------------
-      | REC
-      |--------------------------------------------------------------------------
-      */
       if (
         hierarchy.includes("synd_rec") ||
         hierarchy.includes("display_rec")
@@ -238,11 +150,6 @@ function SyndModel() {
         return
       }
 
-      /*
-      |--------------------------------------------------------------------------
-      | TIMER
-      |--------------------------------------------------------------------------
-      */
       if (
         hierarchy.includes("synd_tempo") ||
         hierarchy.includes("timer")
@@ -252,11 +159,6 @@ function SyndModel() {
         return
       }
 
-      /*
-      |--------------------------------------------------------------------------
-      | VIDRO
-      |--------------------------------------------------------------------------
-      */
       if (
         hierarchy.includes("synd_vidro") ||
         hierarchy.includes("glass")
@@ -266,11 +168,6 @@ function SyndModel() {
         return
       }
 
-      /*
-      |--------------------------------------------------------------------------
-      | DISPLAY / BASE
-      |--------------------------------------------------------------------------
-      */
       if (
         hierarchy.includes("synd_display") ||
         hierarchy.includes("display_frame")
@@ -280,31 +177,16 @@ function SyndModel() {
         return
       }
 
-      /*
-      |--------------------------------------------------------------------------
-      | LOGO
-      |--------------------------------------------------------------------------
-      */
       if (hierarchy.includes("synd_logo")) {
         child.material = logoMaterial
         return
       }
 
-      /*
-      |--------------------------------------------------------------------------
-      | TAMPA
-      |--------------------------------------------------------------------------
-      */
       if (hierarchy.includes("synd_tampa")) {
         child.material = bodyMaterial
         return
       }
 
-      /*
-      |--------------------------------------------------------------------------
-      | CAIXA
-      |--------------------------------------------------------------------------
-      */
       if (hierarchy.includes("synd_caixa")) {
         child.material = bodyMaterial
         return
@@ -316,111 +198,135 @@ function SyndModel() {
 
   return (
     <Center>
-      <primitive object={model} />
+      <primitive
+        object={model}
+        rotation={[Math.PI / 2, 0, 0]}
+      />
     </Center>
   )
 }
 
+function AnimatedSyndModel() {
+  const groupRef = useRef<THREE.Group>(null)
+
+  useFrame((state) => {
+    if (!groupRef.current) return
+    const t = state.clock.getElapsedTime()
+
+    groupRef.current.rotation.y = Math.sin(t * 0.4) * 0.1
+    groupRef.current.rotation.z = Math.sin(t * 0.4) * 0.5
+  })
+
+  return (
+    <group ref={groupRef}>
+      <SyndModel />
+    </group>
+  )
+}
+
+function LoadTrigger({ onLoad }: { onLoad: () => void }) {
+  useMemo(() => {
+    onLoad()
+  }, [onLoad])
+
+  return null
+}
+
 export default function Synd3D() {
+  const [isLoaded, setIsLoaded] = useState(false)
+
   return (
     <div
       className="
         relative
-        h-[550px]
+        md:h-[550px]
+        h-[500px]
         w-full
         cursor-grab
         active:cursor-grabbing
       "
     >
-      <Canvas
-        dpr={[1, 2]}
-        camera={{
-          position: [4, 3, 6],
-          fov: 35,
+      <motion.div
+        className="w-full h-full"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{
+          opacity: isLoaded ? 1 : 0,
+          scale: isLoaded ? 1 : 0.95,
         }}
-        gl={{
-          antialias: true,
-          alpha: true,
-        }}
-        onCreated={({ gl }) => {
-          gl.toneMapping = THREE.ACESFilmicToneMapping
-          gl.toneMappingExposure = 0.95
-        }}
-        style={{
-          touchAction: "none",
-        }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
       >
-        {/*
-        |--------------------------------------------------------------------------
-        | ILUMINAÇÃO
-        |--------------------------------------------------------------------------
-        |
-        | Bem mais neutra.
-        | Não queremos que o azul vire azul-claro/branco conforme rotaciona.
-        */}
+        <Canvas
+          shadows
+          dpr={[1, 2]}
+          camera={{
+            position: [1.2, -1.7, 5],
+            fov: 30,
+          }}
+          gl={{
+            antialias: true,
+            alpha: true,
+          }}
+          onCreated={({ gl }) => {
+            gl.toneMapping = THREE.ACESFilmicToneMapping
+            gl.toneMappingExposure = 0.95
+          }}
+          style={{
+            touchAction: "none",
+          }}
+        >
+          <Environment preset="city" environmentIntensity={0.8} />
 
-       {/* Luz geral — não deixa o lado escuro virar preto */}
-        <ambientLight intensity={1.0} />
+          <ambientLight intensity={0.35} />
+          <hemisphereLight args={["#d8eaff", "#08263a", 0.55]} />
 
-        {/* Preenchimento natural entre parte superior e inferior */}
-        <hemisphereLight
-          args={[
-            "#d8eaff",
-            "#08263a",
-            0.55,
-          ]}
-        />
+          <directionalLight
+            position={[5, 10, 10]}
+            intensity={1.2}
+            castShadow
+            shadow-mapSize={[2048, 2048]}
+            shadow-camera-left={-3}
+            shadow-camera-right={3}
+            shadow-camera-top={3}
+            shadow-camera-bottom={-3}
+            shadow-bias={-0.0005}
+          />
 
-        {/* Luz principal */}
-        <directionalLight
-          position={[5, 10, 10]}
-          intensity={3.20}
-        />
+          <directionalLight position={[-5, 3, 4]} intensity={0.65} />
+          <directionalLight position={[-3, 4, -6]} intensity={0.3} />
 
-        {/* Preenche o lado oposto */}
-        <directionalLight
-          position={[-5, 3, 4]}
-          intensity={0.65}
-        />
+          <Suspense fallback={null}>
+            <Bounds fit clip observe margin={1.45}>
+              <AnimatedSyndModel />
+            </Bounds>
+            <LoadTrigger onLoad={() => setIsLoaded(true)} />
+          </Suspense>
 
-        {/* Luz traseira muito discreta para separar as bordas */}
-        <directionalLight
-          position={[-3, 4, -6]}
-          intensity={0.3}
-        />
+          <ContactShadows
+            position={[0, -1.3, 0]}
+            opacity={0.9}
+            scale={8}
+            blur={1.8}
+            far={3}
+            resolution={1024}
+            color="#000000"
+          />
 
-        <Suspense fallback={null}>
-          <Bounds
-            fit
-            clip
-            observe
-            margin={1.45}
-          >
-            <SyndModel />
-          </Bounds>
-        </Suspense>
-
-        <OrbitControls
-          makeDefault
-
-          enablePan={false}
-          enableZoom={false}
-          enableRotate
-
-          rotateSpeed={0.65}
-
-          autoRotate
-          autoRotateSpeed={3}
-
-          minPolarAngle={Math.PI / 4}
-          maxPolarAngle={Math.PI / 1.55}
-
-          target={[0, 0, 0]}
-        />
-      </Canvas>
+          <OrbitControls
+            makeDefault
+            enablePan={true}
+            enableZoom={true}
+            enableRotate={true}
+            rotateSpeed={0.8}
+            zoomSpeed={1.0}
+            panSpeed={0.8}
+            autoRotate={false}
+            target={[0, 0, 0]}
+          />
+        </Canvas>
+      </motion.div>
 
       <p
-        className="
+        className={`
           pointer-events-none
           absolute
           bottom-4
@@ -429,7 +335,12 @@ export default function Synd3D() {
           whitespace-nowrap
           text-xs
           text-white/35
-        "
+          hidden
+          md:flex
+          transition-opacity
+          duration-700
+          ${isLoaded ? "opacity-100" : "opacity-0"}
+        `}
       >
         Arraste para explorar em 360°
       </p>
