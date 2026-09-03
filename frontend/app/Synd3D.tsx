@@ -84,16 +84,25 @@ function SyndModel() {
     })
 
     const logoMaterial = new THREE.MeshPhysicalMaterial({
-      color: "#E9ECEF",
+      color: "#F4FBFF",
+
+      emissive: new THREE.Color("#D9F6FF"),
+      emissiveIntensity: 1.8,
+
       metalness: 0,
-      roughness: 0.75,
+      roughness: 0.35,
+
       bumpMap: plasticTexture,
-      bumpScale: 0.015,
-      envMapIntensity: 0.5,
+      bumpScale: 0.008,
+
+      clearcoat: 0.25,
+      clearcoatRoughness: 0.25,
+
+      envMapIntensity: 0.35,
     })
 
     const displayMaterial = new THREE.MeshStandardMaterial({
-      color: "#080D12",
+      color: "#173049",
       roughness: 0.48,
       metalness: 0.05,
       polygonOffset: true,
