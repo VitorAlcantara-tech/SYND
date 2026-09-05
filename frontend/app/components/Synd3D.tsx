@@ -249,7 +249,7 @@ export default function Synd3D() {
       className="
         relative
         md:h-[550px]
-        h-[500px]
+        h-[400px]
         w-full
         cursor-grab
         active:cursor-grabbing
