@@ -98,3 +98,14 @@ body {
     @apply transform hover:translate-x-1/24 transition-all;
   }
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #16293d;
+}
+::-webkit-scrollbar-thumb {
+  background: #1b5a88;
+  border-radius: 8px;
+}

@@ -323,7 +323,7 @@ export default function Synd3D() {
           <OrbitControls
             makeDefault
             enablePan={true}
-            enableZoom={true}
+            enableZoom={false}
             enableRotate={true}
             rotateSpeed={0.8}
             zoomSpeed={1.0}
