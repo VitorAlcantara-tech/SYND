@@ -27,7 +27,7 @@ export default function LandingPage() {
                         <div className="btn-light-hover"> Preços </div>
                         <div className="btn-light-hover"> Contato </div>
                     </div>
-                    <Link href={"/vendedor-dash"} className="h-full py-1 px-3 rounded-sm bg-[#05708d] font-md font-light shadow-[0px_5px_1px_-3px_rgba(0,0,0,0.3)] hover:shadow-[0px_1px_5px_-3px_rgba(0,0,0,0.3)] btn-light-hover">
+                    <Link href={"/vendedor-dash"} className="h-full py-1 px-3 rounded-sm bg-[#1e8ac9] font-md font-light shadow-[0px_5px_1px_-3px_rgba(0,0,0,0.3)] hover:shadow-[0px_1px_5px_-3px_rgba(0,0,0,0.3)] btn-light-hover">
                         Entrar
                     </Link>
                 </nav>
