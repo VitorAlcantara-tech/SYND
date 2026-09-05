@@ -84,7 +84,7 @@ function SentimentDashboard() {
         userSelect: "none",
       }}
     >
-      <DashboardHeader />
+      {/* <DashboardHeader />
 
       <style>{`
         .recharts-wrapper:focus,
@@ -92,7 +92,7 @@ function SentimentDashboard() {
         .recharts-surface:focus {
           outline: none !important;
         }
-      `}</style>
+      `}</style> */}
 
       <h3
         style={{
