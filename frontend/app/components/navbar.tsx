@@ -7,10 +7,10 @@ import logo from '@/public/images/synd_logo.png'
 import Link from 'next/link'
 
 const menuItems = [
+  { label: 'Inicio', icon: Home, href: '/' },
   { label: 'Tarefas', icon: Clipboard, href: '#' },
   { label: 'Agenda', icon: Calendar, href: '#' },
   { label: 'Clientes', icon: Users, href: '#' },
-  { label: 'Inicio', icon: Home, href: 'http://localhost:3000/' }
 ];
 
 export default function Header() {
