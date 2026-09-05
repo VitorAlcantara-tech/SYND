@@ -11,6 +11,7 @@ const menuItems = [
   { label: 'Tarefas', icon: Clipboard, href: '#' },
   { label: 'Agenda', icon: Calendar, href: '#' },
   { label: 'Clientes', icon: Users, href: '#' },
+  { label: 'Gerente', icon: Users, href: '/gerente-dash' },
 ];
 
 export default function Header() {
