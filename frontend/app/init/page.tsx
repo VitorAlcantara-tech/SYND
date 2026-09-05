@@ -3,7 +3,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Upload from "../Upload";
 
-export default function Home() {
+export default function Init() {
   const [arquivo, setArquivo] = useState<File | null>(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
   const [resposta, setResposta] = useState("");
@@ -83,7 +83,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100 px-6 py-10">
-    <Upload/>
+      <Upload/>
     </main>
   );
 }
