@@ -77,8 +77,8 @@ export default function LandingPage() {
                                 pointer-events-auto
                                 absolute
                                 inset-0
-                            
-                                z-100
+                                z-50
+                                md:z-100
                             "
                             >
                             <Synd3D />

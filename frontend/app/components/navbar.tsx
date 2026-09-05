@@ -28,8 +28,8 @@ export default function Header() {
 
   return (
     <div className="relative">
-      <nav className="w-full flex flex-row flex-wrap justify-between items-center gap-4 px-6 md:px-15 py-5 md:pt-10">
-        <a href="http:/" className="flex items-center gap-2">
+      <nav className="w-full flex flex-row flex-wrap justify-between items-center gap-4 px-3 md:px-15 py-5 md:pt-10">
+        <a href="/" className="flex items-center gap-2">
           <Image
             alt="Logo escrito SYND"
             src={logo}
@@ -40,7 +40,7 @@ export default function Header() {
         </a>
 
         <button
-          className="relative z-30 p-3 -m-3 flex flex-col gap-2 justify-center items-center w-[28px] h-[22px]"
+          className="relative z-30 p-3 pr-7 -m-3 flex flex-col gap-2 justify-center items-center w-[28px] h-[22px]"
           onClick={toggleSideBar}
           aria-label={sidebar ? 'Fechar menu' : 'Abrir menu'}
         >
