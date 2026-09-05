@@ -10,7 +10,7 @@ import Link from 'next/link'
 export default function Init() {
     return (
         <main className="w-full min-h-screen overflow-x-hidden text-white" style={{
-            background: "linear-gradient(139deg, #002740 0%, #06486C 53%, #06486C 98%)"
+            background: "radial-gradient(114.7% 102.32% at 17.65% 55.35%, #0f71a6 5%, #06486C 30%, #002740 100%"
         }}>
 
             <nav className="w-full flex flex-row flex-wrap justify-between gap-4 px-6 md:px-15 pt-6 md:pt-10">
