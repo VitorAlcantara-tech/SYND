@@ -10,7 +10,7 @@ import Link from 'next/link'
 export default function LandingPage() {
     return (
     <main className="w-full min-h-screen overflow-x-hidden text-white" style={{
-                background: "linear-gradient(139deg, #002740 0%, #06486C 53%, #06486C 98%)"
+             background: "radial-gradient(114.7% 102.32% at 17.65% 50.35%, #0f71a6 5%, #06486C 53%, #002740 100%)"
             }}>
 
                 <nav className="w-full flex flex-row flex-wrap justify-between gap-4 px-6 md:px-15 pt-6 md:pt-10">
@@ -27,8 +27,8 @@ export default function LandingPage() {
                         <div className="btn-light-hover"> Preços </div>
                         <div className="btn-light-hover"> Contato </div>
                     </div>
-                    <Link href={"/vendedor-dash"} className="h-full py-1 px-2 rounded-sm bg-[#05708d] font-md font-light shadow-[0px_5px_1px_-3px_rgba(0,0,0,0.3)] hover:shadow-[0px_1px_5px_-3px_rgba(0,0,0,0.3)] btn-light-hover">
-                        Login
+                    <Link href={"/vendedor-dash"} className="h-full py-1 px-3 rounded-sm bg-[#05708d] font-md font-light shadow-[0px_5px_1px_-3px_rgba(0,0,0,0.3)] hover:shadow-[0px_1px_5px_-3px_rgba(0,0,0,0.3)] btn-light-hover">
+                        Entrar
                     </Link>
                 </nav>
                 <div className="flex flex-col-reverse md:flex-row" >
