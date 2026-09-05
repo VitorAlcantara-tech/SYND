@@ -1,3 +1,17 @@
+import type { ComponentType } from "react";
+
+type SummaryMetricCardProps = {
+  label: string;
+  value: string;
+  detail: string;
+  progress: number;
+  icon: ComponentType<{ className?: string }>;
+  iconColor: string;
+  badgeBg: string;
+  badgeText: string;
+  barColor: string;
+};
+
 export function SummaryMetricCard({
   label,
   value,
@@ -8,53 +22,139 @@ export function SummaryMetricCard({
   badgeBg,
   badgeText,
   barColor,
-}: {
-  label: string;
-  value: string;
-  detail: string;
-  progress: number;
-  icon: React.ComponentType<{ className?: string }>;
-  iconColor: string;
-  badgeBg: string;
-  badgeText: string;
-  barColor: string;
-}) {
+}: SummaryMetricCardProps) {
   return (
     <div
       className="
-        px-5
-        py-5
+        min-w-0
+        w-full
+
+        px-2
+        py-3
+
+        sm:px-4
+        sm:py-5
+
+        lg:px-5
+        lg:py-5
       "
     >
-      <p className="text-[18px] font-semibold text-[#F2F8FB]">
+      {/* TÍTULO */}
+      <p
+        className="
+          text-[12px]
+          font-semibold
+          leading-tight
+          text-[#F2F8FB]
+
+          sm:text-[15px]
+          lg:text-[18px]
+        "
+      >
         {label}
       </p>
 
-      <div className="mt-1 flex items-center gap-2">
-        <span className="text-[20px] font-bold text-white md:text-[20px]">
+      {/* VALOR + ÍCONE */}
+      <div
+        className="
+          mt-1
+          flex
+          items-center
+          gap-1.5
+
+          sm:gap-2
+        "
+      >
+        <span
+          className="
+            text-[18px]
+            font-bold
+            leading-none
+            text-white
+
+            sm:text-[20px]
+          "
+        >
           {value}
         </span>
 
-        <Icon className={`h-4 w-4 ${iconColor}`} />
+        <Icon
+          className={`
+            h-3.5
+            w-3.5
+            shrink-0
+
+            sm:h-4
+            sm:w-4
+
+            ${iconColor}
+          `}
+        />
       </div>
 
-      <div className="mt-2">
+      {/* BADGE */}
+      <div className="mt-2 min-w-0">
         <span
           className={`
-            inline-flex items-center rounded-[4px]
-            px-2 py-[3px]
-            text-[10px] font-medium
-            ${badgeBg} ${badgeText}
+            inline-flex
+            max-w-full
+            items-center
+            rounded-[4px]
+
+            px-1.5
+            py-[2px]
+
+            text-[7px]
+            font-medium
+
+            sm:px-2
+            sm:py-[3px]
+            sm:text-[9px]
+
+            md:text-[10px]
+
+            ${badgeBg}
+            ${badgeText}
           `}
         >
-          {detail}
+          <span className="truncate">
+            {detail}
+          </span>
         </span>
       </div>
 
-      <div className="mt-4 h-[10px] w-full overflow-hidden rounded-[3px] bg-[#08324A]">
+      {/* BARRA - escondida no mobile */}
+      <div
+        className="
+          hidden
+          w-full
+          overflow-hidden
+          rounded-[3px]
+          bg-[#08324A]
+
+          sm:block
+          sm:mt-4
+          sm:h-[8px]
+
+          lg:h-[10px]
+        "
+      >
         <div
-          className={`h-full rounded-left-[3px] ${barColor}`}
-          style={{ width: `${progress}%` }}
+          className={`
+            h-full
+            rounded-l-[3px]
+            transition-[width]
+            duration-500
+            ease-out
+
+            ${barColor}
+          `}
+          style={{
+            width: `${Math.min(
+              Math.max(progress, 0),
+              100
+            )}%`,
+          }}
         />
       </div>
     </div>
