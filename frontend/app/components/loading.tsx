@@ -40,7 +40,7 @@ export default function SyndLoadingScreen() {
     <div
       className={`
         fixed inset-0 z-[99]
-        flex items-center justify-start px-70
+        flex items-center justify-center md:justify-start md:px-70
         overflow-hidden
         bg-[#06445f]
         transition-all duration-700 ease-out
