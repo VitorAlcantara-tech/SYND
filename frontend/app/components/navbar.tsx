@@ -29,13 +29,15 @@ export default function Header() {
   return (
     <div className="relative">
       <nav className="w-full flex flex-row flex-wrap justify-between items-center gap-4 px-6 md:px-15 py-5 md:pt-10">
-        <Image
-          alt="Logo escrito SYND"
-          src={logo}
-          width={120}
-          height={120}
-          className="w-20 md:w-[120px] h-auto"
-        />
+        <a href="http:/" className="flex items-center gap-2">
+          <Image
+            alt="Logo escrito SYND"
+            src={logo}
+            width={120}
+            height={120}
+            className="w-20 md:w-[120px] h-auto"
+          />
+        </a>
 
         <button
           className="relative z-30 p-3 -m-3 flex flex-col gap-2 justify-center items-center w-[28px] h-[22px]"
