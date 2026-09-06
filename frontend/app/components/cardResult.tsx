@@ -24,13 +24,13 @@ export default function CardResult({
   onOpen = () => {},
 }: TranscriptCardProps) {
   return (
-    <div className="md:border-l-2 border-white/80 md:pr-10">
-    <div className="flex w-full box-border rounded-[5px] px-3 md:px-8 py-7 font-sans text-[#E6EDF3]">
+    <div className="lg:border-l-2 border-white/80 lg:pr-10">
+    <div className="flex w-full box-border rounded-[5px] px-3 lg:px-8 py-7 font-sans text-[#E6EDF3]">
       <div>
       {/* Header */}
-      <div className="mb-5 flex items-center justify-between">
-        <h2 className="m-0 text-md md:text-xl font-semibold text-[#F5F8FA]">
-          Transcrição Recente
+      <div className="mb-1 lg:mb-5 flex items-center justify-between">
+        <h2 className="m-0 lg:text-xl lg:font-semibold text-[11px] tracking-wide text-[#7C93A8] lg:text-[#F5F8FA]">
+          TRANSCRIÇÃO
         </h2>
         <button
           onClick={onOpen}
@@ -45,13 +45,13 @@ export default function CardResult({
         <div className="mb-1.5 text-[11px] tracking-wide text-[#7C93A8]">
           {meetingLabel}
         </div>
-        <div className="text-md md:text-lg font-semibold text-[#F5F8FA]">
+        <div className="text-md lg:text-lg font-semibold text-[#F5F8FA]">
           {meetingTitle}
         </div>
       </div>
  
       {/* Stats row */}
-      <div className="mb-5 flex flex-wrap justify-between md:justify-start md:gap-12 border-b border-white/10 pb-5">
+      <div className="mb-5 flex flex-wrap justify-between lg:justify-start lg:gap-12 border-b border-white/10 pb-5">
         <Stat label="Duração" value={duration} />
         <Stat label="Locutores" value={speakers} />
         <Stat

@@ -182,19 +182,18 @@ export default function Gerente() {
       <section className="flex px-6 md:px-15 py-5 md:pt-15 flex-col">
         {/* INTRO */}
 
-        <div className="mb-10">
-          <div className="text-2xl font-semibold">
-            Bem vindo de volta, Vitor
-          </div>
+        <div className="mb-1 md:mb-8">
+                    <div className=" text-lg lg:text-2xl font-semibold text-center md:text-left">Bem vindo de volta, Tadeu</div>
+                    <div className=" text-sm lg:text-base font-light text-center md:text-left">Acompanhe suas métricas comerciais</div>
+        </div>
 
-          <div className="text-md text-[#B8CEDA]">
-            Acompanhe o desempenho dos vendedores e sua agenda
-          </div>
+        <div className="flex justify-center md:hidden">
+                <div className="w-full mx-15 rounded-2xl h-[1px] bg-white/20 mb-10"></div>
         </div>
 
         {/* RESUMO */}
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div className="flex flex-row flex-wrap md:flex-nowrap justify-center">
             {summaryMetrics.map((item) => (
                 <SummaryMetricCard
                 key={item.label}
