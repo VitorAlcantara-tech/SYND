@@ -2,16 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Clipboard, Calendar, Users, Home } from 'lucide-react';
+import { Clipboard, Calendar, Users, Home, FileChartPie, Briefcase, TextSearch } from 'lucide-react';
 import logo from '@/public/images/synd_logo.png'
 import Link from 'next/link'
 
 const menuItems = [
   { label: 'Inicio', icon: Home, href: '/' },
-  { label: 'Tarefas', icon: Clipboard, href: '#' },
-  { label: 'Agenda', icon: Calendar, href: '#' },
-  { label: 'Clientes', icon: Users, href: '#' },
-  { label: 'Gerente', icon: Users, href: '/gerente-dash' },
+  {label: 'Área de Trabalho', icon:Briefcase, href:'/vendedor-dash'},
+  {label: 'Controle Geral', icon:TextSearch, href:'/'},
+  { label: 'Gestão de Filial', icon:FileChartPie, href: '/gerente-dash' },
 ];
 
 export default function Header() {
