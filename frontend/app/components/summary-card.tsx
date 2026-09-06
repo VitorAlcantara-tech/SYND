@@ -27,15 +27,11 @@ export function SummaryMetricCard({
     <div
       className="
         min-w-0
-        w-full
-
+        w-[50%]
+        md:w-full
         px-2
         py-3
-
-        sm:px-4
         sm:py-5
-
-        lg:px-5
         lg:py-5
       "
     >
@@ -48,7 +44,12 @@ export function SummaryMetricCard({
           text-[#F2F8FB]
 
           sm:text-[15px]
+          text-center
+          md:text-start
           lg:text-[18px]
+          pb-2
+          md:pb-4
+
         "
       >
         {label}
@@ -60,8 +61,9 @@ export function SummaryMetricCard({
           mt-1
           flex
           items-center
+          justify-center
+          md:justify-start
           gap-1.5
-
           sm:gap-2
         "
       >
@@ -93,14 +95,13 @@ export function SummaryMetricCard({
       </div>
 
       {/* BADGE */}
-      <div className="mt-2 min-w-0">
+      <div className="flex justify-center md:block mt-2 min-w-0">
         <span
           className={`
+          
             inline-flex
             max-w-full
-            items-center
-            rounded-[4px]
-
+            rounded-sm
             px-1.5
             py-[2px]
 
@@ -127,15 +128,13 @@ export function SummaryMetricCard({
       <div
         className="
           hidden
-          w-full
+          w-[90%]
           overflow-hidden
           rounded-[3px]
           bg-[#08324A]
 
           sm:block
           sm:mt-4
-          sm:h-[8px]
-
           lg:h-[10px]
         "
       >

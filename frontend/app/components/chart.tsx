@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar, SlidersHorizontal, LucideIcon, HeartHandshake } from "lucide-react";
+import { Calendar, SlidersHorizontal, LucideIcon, Heart } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -95,16 +95,13 @@ function SentimentDashboard() {
       `}</style> */}
 
       <h3
+        className="mb-2 text-sm text-[#7C93A8] tracking-[0.13em]"
         style={{
-          margin: "0 0 16px 0",
-          fontWeight: 500,
-          fontSize: '25px',
           display: "flex",
           alignItems: "center",
-          gap: "6px",
         }}
       >
-        Evolução do Sentimento <HeartHandshake color="#04d5f9"/>
+        Evolução do Sentimento
       </h3>
 
       <ResponsiveContainer width="100%" height={350}>
@@ -136,10 +133,10 @@ function SentimentDashboard() {
             tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 12 }}
             domain={[0, 80]}
             ticks={[20, 40, 60]}
-            width={40}
+            width={1}
           />
           <Line
-            type="linear"
+            type="monotone"
             dataKey="value"
             stroke="#ffffff"
             strokeWidth={2}

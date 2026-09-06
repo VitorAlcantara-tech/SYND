@@ -99,11 +99,11 @@ function CloseIcon() {
 function TaskStatusTag({ status }: { status: TaskStatus }) {
   if (status === "concluida") {
     return (
-      <span className="text-sm font-semibold text-[#3FA9F5]">Concluída</span>
+      <span className="text-sm  text-[#3FA9F5]">Concluída</span>
     );
   }
   return (
-    <span className="rounded-xs border border-[#E8A33D] px-2.5 py-1 text-xs font-semibold text-[#E8A33D]">
+    <span className="rounded-xs border border-[#FFB020] px-2.5 py-1 text-xs  text-[#FFB020]">
       Em andamento
     </span>
   );
@@ -132,11 +132,11 @@ function TaskModal({ task, onClose }: { task: Task; onClose: () => void }) {
         <div className="flex flex-col gap-3 text-sm">
           <div className="flex justify-between">
             <span className="text-[#7C93A8]">Cliente</span>
-            <span className="font-semibold text-[#F5F8FA]">{task.client}</span>
+            <span className=" text-[#F5F8FA]">{task.client}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-[#7C93A8]">Prazo</span>
-            <span className="font-semibold text-[#F5F8FA]">{task.date}</span>
+            <span className=" text-[#F5F8FA]">{task.date}</span>
           </div>
           <div className="flex items-start justify-between">
             <span className="text-[#7C93A8]">Status</span>
@@ -199,7 +199,7 @@ export default function TasksCard({
           </button>
         </div>
 
-        <div className="mb-4 mt-4 text-sm font-light md:font-bold text-[#E8A33D]">
+        <div className="mb-4 mt-4 text-sm font-light md:font-normal text-[#f0b851]">
           {pending} pendente{pending !== 1 ? "s" : ""}
         </div>
       </div>
@@ -229,7 +229,7 @@ export default function TasksCard({
                     </button>
                     <div>
                       <div
-                        className={`text-[13px] md:text-[15px] leading-none font-semibold ${
+                        className={`text-[13px] md:text-[15px] leading-none  ${
                           isDone
                             ? "text-[#7C93A8] line-through"
                             : "text-[#F5F8FA]"
@@ -253,7 +253,7 @@ export default function TasksCard({
                       ) : (
                         <button
                           onClick={() => setOpenTaskIdx(idx)}
-                          className="flex gap-1.5 rounded-xs px-2.5 py-1 text-xs font-semibold text-[#E8A33D] transition-colors hover:bg-[#E8A33D]/10"
+                          className="flex gap-1.5 rounded-xs px-2.5 py-1 text-xs  text-[#E8A33D] transition-colors hover:bg-[#E8A33D]/10"
                         >
                           <ArrowIcon />
                         </button>
