@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SYND | Transforme Conversas em Inteligência",
+  title: "SYND | Inteligência Conversacional ",
   description:
     "Inteligência conversacional para transformar interações em dados, insights e decisões.",
 };
