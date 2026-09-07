@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState, useCallback } from "react"
+import useEmblaCarousel from "embla-carousel-react"
 import SentimentDashboard from "../components/chart"
 import Navbar from "../components/navbar"
 import CardResult from "../components/cardResult"
@@ -8,8 +10,142 @@ import TasksCard from "../components/TasksCard"
 import { SummaryMetricCard } from "../components/summary-card"
 import TableClient from "../components/table-clients"
 
-import { Users, CheckCircle2, BriefcaseBusiness, UserCheck, HeartCrack, Heart } from "lucide-react";
+import {
+    Users,
+    CheckCircle2,
+    BriefcaseBusiness,
+    UserCheck,
+    HeartCrack,
+    Heart,
+    ChevronLeft,
+    ChevronRight,
+} from "lucide-react";
+
 export default function Vendedor() {
+
+    // cada item = uma reunião, com os dados de CardResult e InsightTabsCard juntos
+    const meetings = [
+        {
+            id: 1,
+            card: {
+                meetingLabel: "REUNIÃO",
+                meetingTitle: "Renovação de contrato - Alpha Log",
+                duration: "48 min",
+                speakers: "3 locutores",
+                sentimentLabel: "Positivo",
+                sentimentScore: 9,
+                summaryLabel: "RESUMO",
+                summary: "Cliente satisfeito com a operação atual, demonstrando total confiança nos serviços prestados. A relação consolidada abre oportunidade estratégica para expansão contratual. No próximo trimestre, o foco será ampliar o escopo para logística reversa. A iniciativa visa otimizar processos e agregar ainda mais valor à parceria."
+            },
+            insights: {
+                oportunidades: [
+                    {
+                        title: "Enviar proposta do módulo de BI",
+                        description: "Cliente demonstrou interesse em expandir o escopo do contrato.",
+                    },
+                ],
+                dores: [
+                    {
+                        title: "Rever Contatos",
+                        description: "Cliente relatou dificuldade em falar com o time de suporte.",
+                    },
+                ],
+                churn: [
+                    {
+                        title: "Reiniciar Roteador",
+                        description: "Cliente com instabilidade recorrente de conexão.",
+                    },
+                    {
+                        title: "Rever Contatos",
+                        description: "Cliente relatou dificuldade em falar com o time de suporte.",
+                    },
+                ],
+                task: [
+                    {
+                        title: "Agendar follow-up",
+                        description: "Confirmar retorno do cliente até sexta-feira.",
+                    },
+                ],
+            },
+        },
+        {
+            id: 2,
+            card: {
+                meetingLabel: "REUNIÃO",
+                meetingTitle: "Onboarding - Nexus Log铃ística",
+                duration: "35 min",
+                speakers: "2 locutores",
+                sentimentLabel: "Neutro",
+                sentimentScore: 6,
+                summaryLabel: "RESUMO",
+                summary: "Cliente novo em processo de implantação. Demonstrou dúvidas sobre o fluxo de integração com o ERP atual e solicitou material de apoio adicional. Equipe alinhou próximos passos e cronograma de treinamento para as próximas duas semanas."
+            },
+            insights: {
+                oportunidades: [
+                    {
+                        title: "Oferecer módulo de treinamento avançado",
+                        description: "Cliente demonstrou interesse em capacitar mais usuários do time.",
+                    },
+                ],
+                dores: [
+                    {
+                        title: "Falta de clareza no fluxo de integração",
+                        description: "Cliente reportou dificuldade em entender a integração com o ERP.",
+                    },
+                    {
+                        title: "Documentação insuficiente",
+                        description: "Solicitou materiais de apoio mais detalhados.",
+                    },
+                ],
+                churn: [],
+                task: [
+                    {
+                        title: "Enviar cronograma de treinamento",
+                        description: "Compartilhar agenda das próximas duas semanas até amanhã.",
+                    },
+                ],
+            },
+        },
+        {
+            id: 3,
+            card: {
+                meetingLabel: "REUNIÃO",
+                meetingTitle: "Revisão trimestral - Beta Transportes",
+                duration: "52 min",
+                speakers: "4 locutores",
+                sentimentLabel: "Negativo",
+                sentimentScore: 3,
+                summaryLabel: "RESUMO",
+                summary: "Cliente insatisfeito com instabilidades recorrentes na plataforma no último trimestre. Relatou impacto direto nas operações diárias e ameaçou reavaliar a renovação do contrato. Equipe comprometeu-se a escalar o caso internamente e apresentar plano de ação em 48h."
+            },
+            insights: {
+                oportunidades: [],
+                dores: [
+                    {
+                        title: "Instabilidade recorrente da plataforma",
+                        description: "Impactou diretamente as operações do cliente no trimestre.",
+                    },
+                ],
+                churn: [
+                    {
+                        title: "Risco de não renovação",
+                        description: "Cliente sinalizou possível cancelamento se o problema persistir.",
+                    },
+                ],
+                task: [
+                    {
+                        title: "Escalar caso para engenharia",
+                        description: "Priorizar investigação técnica ainda esta semana.",
+                    },
+                    {
+                        title: "Apresentar plano de ação",
+                        description: "Retornar ao cliente em até 48h com plano formal.",
+                    },
+                ],
+            },
+        },
+        // adicione mais objetos aqui, no mesmo formato (card + insights)
+    ]
 
     const summaryMetrics = [
         {
@@ -58,6 +194,27 @@ export default function Vendedor() {
         },
     ];
 
+    const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: false })
+    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [canScrollPrev, setCanScrollPrev] = useState(false)
+    const [canScrollNext, setCanScrollNext] = useState(false)
+
+    const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
+    const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
+
+    useEffect(() => {
+        if (!emblaApi) return
+
+        const onSelect = () => {
+            setSelectedIndex(emblaApi.selectedScrollSnap())
+            setCanScrollPrev(emblaApi.canScrollPrev())
+            setCanScrollNext(emblaApi.canScrollNext())
+        }
+
+        onSelect()
+        emblaApi.on("select", onSelect)
+        emblaApi.on("reInit", onSelect)
+    }, [emblaApi])
 
     return (
         <main className="w-full min-h-screen overflow-x-hidden text-white" style={{
@@ -77,18 +234,63 @@ export default function Vendedor() {
                     <div className="w-full mx-15 rounded-2xl h-[1px] bg-white/20 mb-2"></div>
                 </div>
 
-                <section className="flex flex-wrap justify-between md:bg-black/20 mb-5 md:mb-15 rounded-sm">
+                <div className="relative mb-2">
+                    <div className="overflow-hidden" ref={emblaRef}>
+                        <div className="flex">
+                            {meetings.map((meeting) => (
+                                <section
+                                    key={meeting.id}
+                                    className="flex-[0_0_100%] min-w-0 flex flex-wrap justify-between md:bg-black/20 rounded-sm"
+                                >
+                                    <article className="w-full md:w-[50%]">
+                                        <CardResult {...meeting.card} />
+                                    </article>
 
-                    <article className="w-full md:w-[50%]">
-                        <CardResult />
-                    </article>
+                                    <article className="flex w-full md:w-[50%]">
+                                        <InsightTabsCard {...meeting.insights} />
+                                    </article>
+                                </section>
+                            ))}
+                        </div>
+                    </div>
 
-                    <article className="flex w-full md:w-[50%]">
-                        <InsightTabsCard />
-                    </article>
+                    {meetings.length > 1 && (
+                        <>
+                            <button
+                                onClick={scrollPrev}
+                                disabled={!canScrollPrev}
+                                aria-label="Reunião anterior"
+                                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center h-9 w-9 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:bg-black/70 transition-colors"
+                            >
+                                <ChevronLeft className="h-5 w-5" />
+                            </button>
 
+                            <button
+                                onClick={scrollNext}
+                                disabled={!canScrollNext}
+                                aria-label="Próxima reunião"
+                                className="absolute right-1 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center h-9 w-9 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:bg-black/70 transition-colors"
+                            >
+                                <ChevronRight className="h-5 w-5" />
+                            </button>
+                        </>
+                    )}
+                </div>
 
-                </section>
+                {meetings.length > 1 && (
+                    <div className="flex justify-center gap-2 mb-5 md:mb-15">
+                        {meetings.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => emblaApi?.scrollTo(i)}
+                                aria-label={`Ir para reunião ${i + 1}`}
+                                className={`h-2 w-2 rounded-full transition-colors ${
+                                    selectedIndex === i ? "bg-white" : "bg-white/30"
+                                }`}
+                            />
+                        ))}
+                    </div>
+                )}
 
                 <div className="flex justify-center">
                     <div className="w-full mx-15 rounded-2xl h-[1px] bg-white/20 mb-5"></div>
@@ -131,7 +333,7 @@ export default function Vendedor() {
                 </div>
 
                 <section className="flex w-full mt-10">
-                    <TableClient/>
+                    <TableClient />
                 </section>
 
             </div>

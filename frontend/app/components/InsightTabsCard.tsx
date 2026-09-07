@@ -5,97 +5,77 @@ export interface InsightItem {
   description: string;
 }
 
-export interface InsightTab {
-  key: string;
-  label: string;
-  items: InsightItem[];
-}
+const TABS = [
+  { key: "oportunidades", label: "Oportunidades", color: "#FFB020" },
+  { key: "dores", label: "Dores", color: "#EF4444" },
+  { key: "churn", label: "Churn", color: "#EF4444" },
+  { key: "task", label: "Task", color: "#21D4FD" },
+] as const;
 
 export interface InsightTabsCardProps {
-  tabs?: InsightTab[];
+  oportunidades?: InsightItem[];
+  dores?: InsightItem[];
+  churn?: InsightItem[];
+  task?: InsightItem[];
   defaultTabKey?: string;
 }
 
-const defaultTabs: InsightTab[] = [
-  {
-    key: "oportunidades",
-    label: "Oportunidades",
-    items: [
-      {
-        title: "Enviar proposta do módulo de BI",
-        description:
-          "Não vejo a hora de desligar o computador e esquecer que essa semana existiu. Nem me fale, se meu chefe pedir mais uma reunião rápida hoje eu tenho um surto",
-      },
-    ],
-  },
-  {
-    key: "dores",
-    label: "Dores",
-    items: [
-      {
-        title: "Rever Contatos",
-        description:
-          "Você jura que não contou pra ninguém sobre o que aconteceu no sábado? Claro que não, minha boca é um túmulo! Mas me conta, já tem novidade?",
-      },
-    ],
-  },
-  {
-    key: "churn",
-    label: "Churn",
-    items: [
-      {
-        title: "Reiniciar Roteador",
-        description:
-          "Cara, tenta só reiniciar o roteador antes de ligar pra operadora de novo. Já fiz isso três vezes e continuo sem sinal, tô quase jogando esse aparelho pela janela.",
-      },{
-        title: "Rever Contatos",
-        description:
-          "Você jura que não contou pra ninguém sobre o que aconteceu no sábado? Claro que não, minha boca é um túmulo! Mas me conta, já tem novidade?",
-      },{
-        title: "Enviar proposta do módulo de BI",
-        description:
-          "Não vejo a hora de desligar o computador e esquecer que essa semana existiu. Nem me fale, se meu chefe pedir mais uma reunião rápida hoje eu tenho um surto",
-      }
-    ],
-  },
-];
-
 export default function InsightTabsCard({
-  tabs = defaultTabs,
+  oportunidades = [],
+  dores = [],
+  churn = [],
+  task = [],
   defaultTabKey,
 }: InsightTabsCardProps) {
-  const [activeKey, setActiveKey] = useState(defaultTabKey ?? tabs[0]?.key);
+  const [activeKey, setActiveKey] = useState(defaultTabKey ?? TABS[0].key);
 
-  const activeTab = tabs.find((t) => t.key === activeKey) ?? tabs[0];
+  const itemsByKey: Record<string, InsightItem[]> = {
+    oportunidades,
+    dores,
+    churn,
+    task,
+  };
+
+  const activeIndex = TABS.findIndex((t) => t.key === activeKey);
+  const activeTab = TABS[activeIndex] ?? TABS[0];
+  const activeItems = itemsByKey[activeKey] ?? [];
 
   return (
     <div className="w-full px-3 md:px-7 pb-7 pt-6 font-sans text-[#E6EDF3] rounded-sm">
       {/* Tabs */}
-      <div className="mb-[22px] flex justify-between border-b border-white/10">
-        {tabs.map((tab) => {
-          const isActive = tab.key === activeTab?.key;
+      <div className="relative mb-[22px] flex border-b border-white/10">
+        {TABS.map((tab) => {
+          const isActive = tab.key === activeKey;
           return (
             <button
               key={tab.key}
               onClick={() => setActiveKey(tab.key)}
-              className={`flex-1 border-b-2 bg-transparent pb-3.5 text-[15px] font-semibold transition-colors ${
-                isActive
-                  ? "border-[#F5F8FA] text-[#F5F8FA]"
-                  : "border-transparent text-[#7C93A8]"
+              className={`flex-1 bg-transparent pb-3.5 text-[15px] font-semibold transition-colors ${
+                isActive ? "text-[#F5F8FA]" : "text-[#7C93A8]"
               }`}
             >
               {tab.label}
             </button>
           );
         })}
+
+        {/* Marcador deslizante */}
+        <div
+          className={`absolute bottom-0 h-[2px] bg-[${activeTab.color}] transition-transform duration-300 ease-out`}
+          style={{
+            width: `${100 / TABS.length}%`,
+            transform: `translateX(${activeIndex * 100}%)`,
+          }}
+        />
       </div>
 
       {/* Items */}
       <div className="flex flex-col gap-5">
-        {activeTab?.items.map((item, idx) => (
+        {activeItems.map((item, idx) => (
           <div
             key={idx}
-            className="flex gap-3.5 border-l-[3px] border-[#3FD0F5] pl-3.5"
+            className="flex gap-3.5 border-l-[3px] pl-3.5"
+            style={{ borderColor: activeTab.color }}
           >
             <div>
               <div className="mb-1.5 text-[15px] font-bold text-[#F5F8FA]">
