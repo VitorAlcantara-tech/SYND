@@ -9,6 +9,7 @@ import InsightTabsCard from "../components/InsightTabsCard"
 import TasksCard from "../components/TasksCard"
 import { SummaryMetricCard } from "../components/summary-card"
 import TableClient from "../components/table-clients"
+import MeetingCardSkeleton from "../components/MeetingCardSkeleton"
 
 import {
     Users,
@@ -20,7 +21,8 @@ import {
     ChevronLeft,
     ChevronRight,
     ChevronDown,
-    Download
+    Download,
+    Search
 } from "lucide-react";
 
 import { ReuniaoRaw } from "../components/cardResult";
@@ -82,6 +84,7 @@ export default function Vendedor() {
 
     const [reunioesState, setReunioes] = useState<ReuniaoRaw[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingReq, setIsLoadingReq] = useState(false);
 
     useEffect(() => {
         const carregarReunioes = () => {
@@ -115,7 +118,7 @@ export default function Vendedor() {
     }, [])
 
     const metricas = calcularMetricas(reunioesState);
-    const [stats, setStats] = useState({ total: 0, pending: 0, activeTab:'tarefas' });
+    const [stats, setStats] = useState({ total: 0, pending: 0, activeTab: 'tarefas' });
 
     const summaryMetrics = [
         {
@@ -134,10 +137,10 @@ export default function Vendedor() {
             barColor: "bg-[#2DD4FF]",
         },
         {
-            label: `${stats.activeTab == "tarefas" ?  "Tarefas Concluídas" :  "Uploads Concluídos" }`,
-            value: `${((stats.total-stats.pending) / stats.total *100).toFixed(0)}%`,
-            detail: `${(stats.total-stats.pending)} de ${stats.total} concluídas`,
-            progress: (stats.total-stats.pending) / stats.total *100,
+            label: `${stats.activeTab == "tarefas" ? "Tarefas Concluídas" : "Uploads Concluídos"}`,
+            value: `${((stats.total - stats.pending) / stats.total * 100).toFixed(0)}%`,
+            detail: `${(stats.total - stats.pending)} de ${stats.total} concluídas`,
+            progress: (stats.total - stats.pending) / stats.total * 100,
             icon: CheckCircle2,
             iconColor: "text-[#21D4FD]",
             badgeBg: "bg-[#103847]",
@@ -200,11 +203,52 @@ export default function Vendedor() {
             <nav>
                 <Navbar />
             </nav>
-            <div className="flex md:px-15 py-5 md:pt-15 flex-col">
+            <div className="flex md:px-15 py-5 md:pt-10 flex-col">
 
-                <div className="mb-1 md:mb-10">
-                    <div className=" text-lg lg:text-2xl font-semibold text-center md:text-left">Bem vindo de volta, Tadeu</div>
-                    <div className=" text-sm lg:text-base font-light text-center md:text-left tracking-wide text-[#bac4ce]">Acompanhe suas métricas comerciais</div>
+                <div className="flex flex-col mb-1 md:mb-10 justify-start items-center md:items-start">
+                    <div className="mb-1 md:mb-5 ">
+                        <div className=" text-lg lg:text-2xl font-semibold">Bem vindo de volta, Tadeu</div>
+                        <div className=" text-sm lg:text-base font-light tracking-wide text-[#bac4ce] mb-3 md:mb-0">Acompanhe suas métricas comerciais</div>
+                    </div>
+                    <div className="flex justify-center items-center gap-3 border-l-1">
+                        <input
+                            type="text"
+                            className="bg-black/15 rounded-sm p-2 text-white/90 outline-none text-xs md:text-base"
+                            placeholder="Buscar Transcrição"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    setIsLoadingReq(true)
+
+                                    setTimeout(() => {
+                                    const parsed = {'ID': '1319208', 'Data': '2026-04-01 14:00:00', 'Formato da reunião': 'VIDEO', 'ID status da reunião': '3', 'Status': 'COMPLETED', 'Duração': '01:28:06', 'CODT': 'T61098', 'Tipo de recurso': '', 'Reunião externa': true, 'Data de criação': '2026-03-25 14:07:55', 'UF': 'RS', 'CNAE': '8532500', 'Nome da unidade': 'TOTVS RIO GRANDE DO SUL', 'Segmento': 'EDUCACIONAL', 'Faixa de faturamento do cliente': '01.MICRO I - De R$ 0 a R$ 500.000', 'Data da última pesquisa':'2024-12', 'Nota NPS': '8', 'Transcrição': '[LOCUTOR 5]: tchau.', 'Analise': '{\n  "resumo_geral": "A reunião foi realizada para apresentar a solução de gestão de saúde (TOTVS) para a unidade educacional do cliente, visando integrar a clínica veterinária ao sistema educacional já utilizado (RM). O cliente busca automatizar processos de comissionamento de veterinários e integrar dados financeiros e de estoque, eliminando o retrabalho manual atual. A equipe da TOTVS demonstrou o módulo de saúde e os próximos passos incluem o envio de uma proposta comercial e análise de migração de dados.",\n  "principais_assuntos": "Integração de clínica veterinária ao ecossistema educacional (RM), fluxos de atendimento (ambulatorial/internação), comissionamento de profissionais, gestão de prontuário, farmácia/estoque e faturamento.",\n  "dores": [\n    {\n      "texto": "Inexistência de integração entre o sistema da clínica (Vetus) e o sistema financeiro (RM), gerando retrabalho.",\n      "trecho": "a única desvantagem, até, que foi esse pedido da controladoria e da direção, foi que esse sistema que a gente usa hoje, que é o Vetus, ele não consegue migrar as informações, principalmente financeiras, para o prótese."\n    },\n    {\n      "texto": "Necessidade de realizar cálculos manuais para comissionamento e dispensação de medicamentos.",\n      "trecho": "As prescrições que são feitas pelas veterinárias para os animais internados, elas daí têm a dispensação pela farmácia. Aí uma pessoa pega e faz o cálculo de tudo que foi usado. Tudo manual hoje."\n    }\n  ],\n  "oportunidades": [\n    {\n      "texto": "Expansão de contrato com a inclusão do módulo de saúde (CORE) para a unidade veterinária.",\n      "trecho": "a gente vai entender quais são os módulos que você utiliza hoje, se as suas licenças elas são, contemplariam também o módulo do RM aqui da parte do CORE saúde"\n    },\n    {\n      "texto": "Serviço de migração de dados (carga de dados) realizado pela equipe da TOTVS, agregando valor à proposta.",\n      "trecho": "Então, vocês poderiam colocar também no orçamento essa parte de vocês fazendo toda a migração dos nossos dados?"\n    },\n    {\n      "texto": "Potencial aceleração da migração do sistema para cloud devido à nova iniciativa de gestão.",\n      "trecho": "Dependendo, pode ser que uma iniciativa como essa possa acelerar o processo de migração para cloud, mas é uma discussão em paralelo."\n    }\n  ],\n  "risco_churn": "baixo",\n  "evidencias_churn": [],\n  "sentimento": 9.0,\n  "tarefas": [\n    {\n      "nome": "Compilação de informações e desenho do escopo do projeto pela engenharia de valor.",\n      "data_prevista": "2026-04-11",\n      "trecho": "a gente vai te chamar para para explicar, né, como é que vai ficar, né, essa visão de investimento aí no projeto para atender a clínica."\n    },\n    {\n      "nome": "Envio de proposta comercial consolidada com valores e serviços de migração.",\n      "data_prevista": "2026-04-11",\n      "trecho": "a gente vai compilar todas as informações colhidas aqui e vai montar o escopo, o projeto, e aí a gente vai ter um valor, uma proposta de valores para você."\n    },\n    {\n      "nome": "Estudo de integração com o sistema de imagem (PAX) e laboratório mencionado pelo cliente.",\n      "data_prevista": null,\n      "trecho": "só para pegar depois direitinho o nome do PAX e do laboratório ali para a gente estudar a possibilidade das integrações, tá?"\n    }\n  ]\n}'}
+
+                                    const existenteStr = window.localStorage?.getItem("Reuniao");
+                                    let lista: unknown[] = [];
+
+                                    if (existenteStr) {
+                                        try {
+                                        const existente = JSON.parse(existenteStr);
+                                        lista = Array.isArray(existente) ? existente : [existente];
+                                        } catch {
+                                        lista = [];
+                                        }
+                                    }
+
+                                    
+
+                                    lista.push(parsed);
+                                    window.localStorage?.setItem("Reuniao", JSON.stringify(lista));
+                                    window.dispatchEvent(new Event("reuniaoAtualizada"));
+                                    setIsLoadingReq(false)
+                                    }, 1500)
+
+                                }
+                            }}
+                        />
+                        <button className="btn-light-hover ">
+                        <Search />
+                        </button>
+                    </div>
                 </div>
 
                 <div className="flex justify-center md:hidden">
@@ -214,7 +258,7 @@ export default function Vendedor() {
                 <div className="relative">
                     <div className="overflow-hidden md:shadow-[0px_25px_20px_-20px_rgba(255,255,255,0.02)]" ref={emblaRef}>
                         <div className="flex">
-                            {!isLoading && reunioesState.length > 0 &&
+                            {(!isLoading && reunioesState.length > 0 && !isLoadingReq) &&
                                 reunioesState.map((reuniao) => (
                                     <div key={reuniao.ID} className="flex-[0_0_100%] min-w-0 flex flex-col md:flex-row md:bg-black/15 rounded-md justify-end animate-fade-in-metric2">
                                         <article className="w-full md:w-[50%]">
@@ -254,13 +298,11 @@ export default function Vendedor() {
                                     </div>
                                 ))}
 
-                            {isLoading && (
-                                <div className="flex justify-center items-center w-full p-6 min-h-[200px]">
-                                    <div className="animate-pulse text-sm text-[#bac4ce]">Carregando...</div>
-                                </div>
+                            {(isLoading || isLoadingReq) && (
+                                <MeetingCardSkeleton />
                             )}
 
-                            {!isLoading && !(reunioesState.length > 0) && <div className="flex justify-center w-full p-6">
+                            {(!isLoading && (reunioesState.length <= 0)) && !isLoadingReq && <div className="flex justify-center w-full p-6">
 
                                 <div className="flex justify-center items-center flex-col font-light">
 
@@ -307,7 +349,7 @@ export default function Vendedor() {
                 </div>
 
                 {reunioesState.length > 1 && (
-                    <div className="flex justify-center gap-2 mb-5 mt-5 md:mb-15">
+                    <div className="flex justify-center gap-2 mb-5 mt-5 md:mb-7">
                         {reunioesState.map((_, i) => (
                             <button
                                 key={i}
@@ -328,7 +370,7 @@ export default function Vendedor() {
                     <div className="flex flex-row flex-wrap md:flex-nowrap justify-center mb-12 ">
                         {summaryMetrics.map((item) => (
                             <SummaryMetricCard
-                                key={item.label == "Tarefas Concluídas" ||  item.label ==  "Uploads Concluídos" ?  `${stats.activeTab}-${item.label}` : item.label }
+                                key={item.label == "Tarefas Concluídas" || item.label == "Uploads Concluídos" ? `${stats.activeTab}-${item.label}` : item.label}
                                 label={item.label}
                                 value={item.value}
                                 detail={item.detail}

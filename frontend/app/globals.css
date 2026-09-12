@@ -129,3 +129,7 @@ body {
   background: #1b5a88;
   border-radius: 8px;
 }
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}

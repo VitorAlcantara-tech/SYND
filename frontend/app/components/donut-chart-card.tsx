@@ -16,7 +16,7 @@ interface DonutChartCardProps {
 export default function DonutChartCard({ title, data }: DonutChartCardProps) {
     return (
         <div className="w-full max-w-xs border-1 border-[#0D151A]/15 md:bg-[#0D151A]/30 rounded-sm p-6">
-            <h2 className="text-xs font-bold tracking-wide text-white mb-6">
+            <h2 className="text-xs font-bold tracking-wide text-white mb-6 text-center">
                 {title}
             </h2>
 

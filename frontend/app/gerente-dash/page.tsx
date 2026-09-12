@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { SummaryMetricCard } from "../components/summary-card";
 import TableSellers from "../components/table-sellers";
+import VendedoresGrid from "../components/vendedores-grid";
 
 type AgendaEvent = {
   id: number;
@@ -25,7 +26,7 @@ const summaryMetrics = [
     label: "Vendedores Ativos",
     value: "8",
     detail: "+1 este mês",
-    progress: 68,
+    progress: 90,
     icon: Users,
     iconColor: "text-[#2DD4FF]",
     badgeBg: "bg-[#12384B]",
@@ -47,7 +48,7 @@ const summaryMetrics = [
     label: "Oportunidades",
     value: "31",
     detail: "Em aberto",
-    progress: 54,
+    progress: 100,
     icon: BriefcaseBusiness,
     iconColor: "text-[#FFB020]",
     badgeBg: "bg-[#3A2A0A]",
@@ -58,12 +59,12 @@ const summaryMetrics = [
     label: "Clientes",
     value: "64",
     detail: "Em acompanhamento",
-    progress: 81,
+    progress: 91,
     icon: UserCheck,
-    iconColor: "text-[#00E5D0]",
-    badgeBg: "bg-[#0E3536]",
-    badgeText: "text-[#7EF7EA]",
-    barColor: "bg-[#00E5D0]",
+    iconColor: "text-[#2DD4FF]",
+    badgeBg: "bg-[#12384B]",
+    badgeText: "text-[#B9D8E6]",
+    barColor: "bg-[#2DD4FF]",
   },
 ];
 
@@ -115,6 +116,98 @@ const months = [
   "Outubro",
   "Novembro",
   "Dezembro",
+];
+
+const vendedores = [
+  {
+        nome: 'Tadeu Felipe',
+        local: 'SP Santana',
+        iniciais: 'TF',
+        corTema: '#2DD4FF',
+        corAvatar: '#0E88C9',
+        tendencia: 'baixa',
+        atingimento: 11,
+        reunioesFeitas: 1,
+        reunioesTotal: 9,
+        sentimento: 3.5,
+        oportunidades: 10,
+        churn: 2,
+        historico: [9, 9, 9, 0, 0, 1, -5],
+    },
+    {
+        nome: 'Camila Rocha',
+        local: 'SP Santana',
+        iniciais: 'CR',
+        corTema: '#4ADE80',
+        corAvatar: '#4ADE80',
+        tendencia: 'estavel',
+        atingimento: 99,
+        reunioesFeitas: 83,
+        reunioesTotal: 84,
+        sentimento: 8.9,
+        oportunidades: 17,
+        churn: 0,
+        historico: [4, 6, 5, 7, 6, 8, 7],
+    },
+    {
+        nome: 'Marina Costa',
+        local: 'SP Santana',
+        iniciais: 'MC',
+        corTema: '#A78BFA',
+        corAvatar: '#8B5CF6',
+        tendencia: 'estavel',
+        atingimento: 100,
+        reunioesFeitas: 74,
+        reunioesTotal: 74,
+        sentimento: 8.1,
+        oportunidades: 8,
+        churn: 0,
+        historico: [8, 7, 7, 6, 5, 4, 3],
+    },
+    {
+        nome: 'Fernando Lima',
+        local: 'SP Santana',
+        iniciais: 'FL',
+        corTema: '#ec5cc1',
+        corAvatar: '#ec5cc1',
+        tendencia: 'alta',
+        atingimento: 89,
+        reunioesFeitas: 66,
+        reunioesTotal: 74,
+        sentimento: 7.8,
+        oportunidades: 9,
+        churn: 1,
+        historico: [3, 4, 5, 5, 6, 7, 8],
+    },
+    {
+        nome: 'Ricardo Alves',
+        local: 'SP Santana',
+        iniciais: 'RA',
+        corTema: '#FFB020',
+        corAvatar: '#FFB020',
+        tendencia: 'baixa',
+        atingimento: 64,
+        reunioesFeitas: 47,
+        reunioesTotal: 74,
+        sentimento: 5.4,
+        oportunidades: 3,
+        churn: 4,
+        historico: [8, 7, 6, 5, 4, 4, 3],
+    },{
+        nome: 'Maria Aparecida',
+        local: 'SP Santana',
+        iniciais: 'MC',
+        corTema: '#ec868b',
+        corAvatar: '#ec868b',
+        tendencia: 'estavel',
+        atingimento: 50,
+        reunioesFeitas: 30,
+        reunioesTotal: 60,
+        sentimento: 7.1,
+        oportunidades: 8,
+        churn: 0,
+        historico: [8, 7, 7, 6, 5, 4, 3],
+    },
 ];
 
 const weekDays = ["D", "S", "T", "Q", "Q", "S", "S"];
@@ -182,10 +275,11 @@ export default function Gerente() {
       <section className="flex px-6 md:px-15 py-5 md:pt-15 flex-col">
         {/* INTRO */}
 
-        <div className="mb-1 md:mb-8">
-                    <div className=" text-lg lg:text-2xl font-semibold text-center md:text-left">Bem vindo de volta, Tadeu</div>
-                    <div className=" text-sm lg:text-base font-light text-center md:text-left">Acompanhe suas métricas comerciais</div>
-        </div>
+        <div className="mb-1 md:mb-15">
+                    <div className=" text-lg lg:text-2xl font-semibold text-center md:text-left">Bem vindo de volta, Vânia</div>
+                    <div className=" text-sm lg:text-base font-light text-center md:text-left tracking-wide text-[#bbbace]">Analise o desempenho da equipe</div>
+                </div>
+
 
         <div className="flex justify-center md:hidden">
                 <div className="w-full mx-15 rounded-2xl h-[1px] bg-white/20 mb-10"></div>
@@ -210,13 +304,18 @@ export default function Gerente() {
             ))}
         </div>
 
+        <div className="flex justify-center">
+                    <div className="w-full mx-15 rounded-2xl h-[1px] bg-white/20 mt-15"></div>
+        </div>
+
         {/* CONTEÚDO PRINCIPAL */}
 
         <div className="grid grid-cols-1 xl:grid-cols-[1.65fr_1fr] mt-12">
           {/*PERFORMANCE*/}
 
-          <TableSellers />
-
+          <div className="pr-5">
+         <VendedoresGrid vendedores={vendedores} onVerDetalhes={(v) => console.log(v)} />
+          </div>
           {/* AGENDA */}
 
           <section className="mt-12 xl:mt-0 xl:border-l xl:border-[#31586C] xl:pl-12">

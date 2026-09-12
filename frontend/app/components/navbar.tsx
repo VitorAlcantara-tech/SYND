@@ -28,7 +28,7 @@ export default function Header() {
 
   return (
     <div className="relative">
-      <nav className="w-full flex flex-row flex-wrap justify-between items-center gap-4 px-3 md:px-15 py-5 md:pt-10">
+      <nav className="w-full flex flex-row flex-wrap justify-between items-center gap-4 px-3 md:px-15 py-5">
         <a href="/" className="flex items-center gap-2">
           <Image
             alt="Logo escrito SYND"

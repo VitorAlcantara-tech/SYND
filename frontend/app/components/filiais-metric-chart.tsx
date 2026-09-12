@@ -42,9 +42,9 @@ export default function FiliaisMetricChart({
     const metricaSelecionada = METRICAS.find((m) => m.key === metricaAtiva)!;
 
     return (
-        <div className="w-full border-1 border-[#0D151A]/15 bg-[#0D151A]/30 rounded-sm p-6">
+        <div className="w-full border-1 border-[#0D151A]/15 md:bg-[#0D151A]/30 rounded-sm p-6">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xs font-bold tracking-wide text-white">
+                <h2 className="text-xs font-bold tracking-wide text-white hidden md:block">
                     {title}
                 </h2>
 

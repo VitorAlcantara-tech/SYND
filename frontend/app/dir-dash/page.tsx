@@ -5,7 +5,7 @@ import {
     CheckCircle2,
     BriefcaseBusiness,
     Users,
-    UserCheck, Mic
+    UserCheck, SlidersHorizontal
 } from "lucide-react";
 
 import DonutChartCard from "../components/donut-chart-card";
@@ -206,12 +206,13 @@ export default function Diretor() {
                     "linear-gradient(135deg, #042133 0%, #002740 8%, #0D151A 93%)",
             }}>
             <Navbar />
-
             <div className="flex md:px-15 py-5 md:pt-10 flex-col">
                 <div className="mb-8 ">
                     <div className=" text-lg lg:text-2xl font-semibold text-center md:text-left">Bem vindo de volta, Laércio</div>
                     <div className=" text-sm lg:text-base font-light text-center md:text-left tracking-wide text-[#bac4ce]">Examine o status das filiais</div>
                 </div>
+
+                <div className="flex text-sm"><div className="hidden md:flex items-center gap-3 border-1 border-[#0D151A]/15 bg-[#0D151A]/30 rounded-sm mb-5 p-3">Filtrar por Filial <SlidersHorizontal size={'14px'}/></div></div>
 
                 <section className="flex w-full px-10 border-1 border-[#0D151A]/15 md:bg-[#0D151A]/30 rounded-sm">
                     <div className="flex flex-row w-full flex-wrap md:flex-nowrap justify-between">
@@ -227,15 +228,17 @@ export default function Diretor() {
                                 badgeBg={item.badgeBg}
                                 badgeText={item.badgeText}
                                 barColor={item.barColor}
-                                barVisible={item.barVisible}
+                                // barVisible={item.barVisible}
                             />
                         ))}
                     </div>
                 </section>
 
                 <div className="flex justify-center">
-                    <div className="w-full mx-15 rounded-2xl h-[1px] bg-white/20 my-10"></div>
+                    <div className="w-full mx-15 rounded-2xl h-[1px] bg-white/20 mt-10 md:my-10"></div>
                 </div>
+                <div className="flex text-xs justify-center"><div className="flex md:hidden mt-5 items-center gap-3 border-1 border-[#0D151A]/15 bg-[#0D151A]/30 rounded-sm p-3">Filtrar por Filial <SlidersHorizontal size={'14px'}/></div></div>
+
 
                 <div className="flex flex-wrap md:flex-nowrap w-full justify-center md:items-start md:justify-between gap-5">
                     <DonutChartCard title="OPORTUNIDADES POR TIPO" data={oportunidadesPorTipo} />
