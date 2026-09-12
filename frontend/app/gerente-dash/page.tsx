@@ -277,7 +277,7 @@ export default function Gerente() {
 
         <div className="mb-1 md:mb-15">
                     <div className=" text-lg lg:text-2xl font-semibold text-center md:text-left">Bem vindo de volta, Vânia</div>
-                    <div className=" text-sm lg:text-base font-light text-center md:text-left tracking-wide text-[#bbbace]">Analise o desempenho da equipe</div>
+                    <div className=" text-sm lg:text-base font-light text-center md:text-left tracking-wide text-[#bac4ce]">Analise o desempenho da equipe</div>
                 </div>
 
 
