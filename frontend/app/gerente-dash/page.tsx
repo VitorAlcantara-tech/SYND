@@ -277,7 +277,7 @@ export default function Gerente() {
 
         <div className="mb-1 md:mb-15">
                     <div className=" text-lg lg:text-2xl font-semibold text-center md:text-left">Bem vindo de volta, Vânia</div>
-                    <div className=" text-sm lg:text-base font-light text-center md:text-left tracking-wide text-[#bac4ce]">Analise o desempenho da equipe</div>
+                    <div className=" text-sm lg:text-base font-light text-center md:text-left tracking-wide text-[#bac4ce]">Analise o desempenho da Filial Santana-SP</div>
                 </div>
 
 
@@ -314,20 +314,17 @@ export default function Gerente() {
           {/*PERFORMANCE*/}
 
           <div className="pr-5">
+            <h2 className="text-xl font-semibold mt-2 text-[#F8FCFF] mb-8">
+                Equipe Comercial
+            </h2>
          <VendedoresGrid vendedores={vendedores} onVerDetalhes={(v) => console.log(v)} />
           </div>
           {/* AGENDA */}
 
-          <section className="mt-12 xl:mt-0 xl:border-l xl:border-[#31586C] xl:pl-12">
-            <div className="mb-8">
-              <p className="text-[11px] tracking-[0.18em] uppercase text-[#63BCE7] font-semibold">
-                Equipe
-              </p>
-
+          <section className="mt-12 xl:mt-0 xl:border-l xl:border-[#31586C] xl:pl-5">
               <h2 className="text-xl font-semibold mt-2 text-[#F8FCFF]">
                 Agenda geral
               </h2>
-            </div>
 
             {/* MÊS */}
 
