@@ -5,7 +5,9 @@ import {
     CheckCircle2,
     BriefcaseBusiness,
     Users,
-    UserCheck, SlidersHorizontal
+    UserCheck, SlidersHorizontal, HeartCrack, RefreshCwOff, StarCheck, UserPlus,
+    Lightbulb,
+    Goal
 } from "lucide-react";
 
 import DonutChartCard from "../components/donut-chart-card";
@@ -43,68 +45,68 @@ export default function Diretor() {
 
     const summaryMetrics = [
         {
-            label: "Vendedores Ativos",
-            value: "8",
+            label: "Clientes Fidelizados",
+            value: "15",
             detail: "+1 este mês",
             progress: 68,
-            icon: Users,
+            icon: StarCheck,
             iconColor: "text-[#2DD4FF]",
             badgeBg: "bg-[#12384B]",
             badgeText: "text-[#B9D8E6]",
             barColor: "bg-[#2DD4FF]",
         },
         {
-            label: "Tarefas Concluídas",
-            value: "72%",
-            detail: "138 de 191 tarefas",
-            progress: 72,
-            icon: CheckCircle2,
-            iconColor: "text-[#21D4FD]",
-            badgeBg: "bg-[#103847]",
-            badgeText: "text-[#8FE8FF]",
-            barColor: "bg-[#21D4FD]",
+            label: "Recisões Contratuais",
+            value: "3",
+            detail: "Meta anual: < 5",
+            progress: 60,
+            icon: RefreshCwOff,
+            iconColor: "text-[#E5534B]",
+            badgeBg: "bg-[rgba(127,29,29,0.3)]",
+            badgeText: "text-[#EF4444]",
+            barColor: "bg-[#EF4444]",
         },
         {
-            label: "Oportunidades",
-            value: "31",
-            detail: "Em aberto",
-            progress: 54,
-            icon: BriefcaseBusiness,
+            label: "Novos Clientes",
+            value: "21",
+            detail: "Meta anual: 18",
+            progress: 100,
+            icon: UserPlus,
             iconColor: "text-[#FFB020]",
             badgeBg: "bg-[#3A2A0A]",
             badgeText: "text-[#FFD27A]",
             barColor: "bg-[#FFB020]",
         },
         {
-            label: "Clkjientes",
-            value: "64",
-            detail: "Em acompanhamento",
-            progress: 81,
-            icon: UserCheck,
-            iconColor: "text-[#00E5D0]",
-            badgeBg: "bg-[#0E3536]",
-            badgeText: "text-[#7EF7EA]",
-            barColor: "bg-[#00E5D0]",
+            label: "Produto mais Popular",
+            value: "SIGAEST",
+            detail: "1.302 menções",
+            progress: 100,
+            icon: Lightbulb,
+            iconColor: "text-[#2DD4FF]",
+            badgeBg: "bg-[#12384B]",
+            badgeText: "text-[#B9D8E6]",
+            barColor: "bg-[#2DD4FF]",
         }, {
-            label: "Cliendtes",
-            value: "64",
-            detail: "Em acompanhamento",
+            label: "Produto mais Criticado",
+            value: "SIGAMDT",
+            detail: "532 reclamações",
             progress: 81,
-            icon: UserCheck,
-            iconColor: "text-[#00E5D0]",
-            badgeBg: "bg-[#0E3536]",
-            badgeText: "text-[#7EF7EA]",
-            barColor: "bg-[#00E5D0]",
+            icon: HeartCrack,
+            iconColor: "text-[#E5534B]",
+            badgeBg: "bg-[rgba(127,29,29,0.3)]",
+            badgeText: "text-[#EF4444]",
+            barColor: "bg-[#EF4444]",
         }, {
-            label: "Clientaes",
-            value: "64",
-            detail: "Em acompanhamento",
-            progress: 81,
-            icon: UserCheck,
-            iconColor: "text-[#00E5D0]",
-            badgeBg: "bg-[#0E3536]",
-            badgeText: "text-[#7EF7EA]",
-            barColor: "bg-[#00E5D0]",
+            label: "Atingimento da Meta",
+            value: "80%",
+            detail: "Expectativa para o mês: 72% ",
+            progress: 80,
+            icon: Goal,
+            iconColor: "text-[#2DD4FF]",
+            badgeBg: "bg-[#12384B]",
+            badgeText: "text-[#B9D8E6]",
+            barColor: "bg-[#2DD4FF]",
         },
     ];
 
@@ -200,7 +202,7 @@ export default function Diretor() {
             <div className="flex md:px-15 py-5 md:pt-10 flex-col">
                 <div className="mb-8 ">
                     <div className=" text-lg lg:text-2xl font-semibold text-center md:text-left">Bem vindo de volta, Laércio</div>
-                    <div className=" text-sm lg:text-base font-light text-center md:text-left tracking-wide text-[#bac4ce]">Examine o status das filiais</div>
+                    <div className=" text-sm lg:text-base font-light text-center md:text-left tracking-wide text-[#bac4ce]">Examine as métricas das filiais</div>
                 </div>
 
                 <div className="flex text-sm"><div className="hidden md:flex items-center gap-3 border-1 border-[#0D151A]/15 bg-[#0D151A]/30 rounded-sm mb-5 p-3">Filtrar por Filial <SlidersHorizontal size={'14px'}/></div></div>
