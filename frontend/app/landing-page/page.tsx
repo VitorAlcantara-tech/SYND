@@ -6,6 +6,7 @@
     import Link from "next/link"
     import NavbarLandingPage from "../components/navbar-LandingPage"
     import SyndSteps from "@/app/components/syndSteps"
+    import SensorSetup from "@/app/components/sensorSetup"
 
     export default function LandingPage() {
         return (
@@ -66,6 +67,9 @@
 
                 {/* COMO O SYND FUNCIONA */}
                 <SyndSteps />
+
+                {/* PASSO A PASSO */}
+                <SensorSetup />
 
             </main>
         )
