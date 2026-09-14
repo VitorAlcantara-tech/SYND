@@ -424,26 +424,26 @@
 
                                 {activeStep < steps.length - 1 ? (
 
-                                    <button
-                                        onClick={nextStep}
-                                        className="
-                                            flex
-                                            items-center
-                                            gap-2
-                                            px-5
-                                            py-3
-                                            rounded-full
-                                            bg-white
-                                            text-[#06486C]
-                                            text-sm
-                                            font-medium
-                                            hover:bg-white/90
-                                            transition
-                                        "
-                                    >
-                                        Próxima etapa
-                                        <span>→</span>
-                                    </button>
+<button
+    onClick={nextStep}
+    className="
+        flex
+        items-center
+        gap-2
+        px-5
+        py-3
+        rounded-sm
+        bg-white
+        text-[#06486C]
+        text-sm
+        font-medium
+        hover:bg-white/90
+        transition
+    "
+>
+    Próxima etapa
+    <span>→</span>
+</button>
 
                                 ) : (
 
