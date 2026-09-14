@@ -37,7 +37,7 @@
                         </p>
 
                         <Link
-                            href="/init"
+                            href="/vendedor-dash"
                             className="flex font-md gap-1 text-lg items-center btn-light-right-hover"
                         >
                             Fazer upload
